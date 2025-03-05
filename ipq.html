@@ -28,7 +28,7 @@
         <h1>IPQ - Igroup Presence Questionnaire</h1>
         <p>Please rate the following statements about your experience.</p>
 
-        <form>
+        <form id="ipqForm">
 
             <!-- Generate IPQ Questions using JavaScript -->
             <script>
@@ -73,5 +73,36 @@
         </form>
     </div>
 
+    <script>
+        function saveExcel() {
+            const form = document.getElementById("ipqForm");
+            const participantId = document.getElementById("participantId").value.trim();
+            const conditionId = document.getElementById("conditionId").value.trim();
+
+            if (!participantId || !conditionId) {
+                alert("Please enter both Participant ID and Condition ID.");
+                return;
+            }
+
+            const responses = [];
+
+            // Collect responses
+            for (let i = 1; i <= 10; i++) {
+                const selected = form.querySelector(`input[name="q${i}"]:checked`);
+                const value = selected ? selected.value : "";
+                responses.push({ UEQindex: i, value: value });
+            }
+
+            // Create and save the Excel file
+            const worksheet = XLSX.utils.json_to_sheet(responses);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Responses");
+
+            const filename = `sus_${participantId}_${conditionId}.xlsx`;
+            XLSX.writeFile(workbook, filename);
+
+            alert(`Responses saved to ${filename}!`);
+        }
+    </script>
 </body>
 </html>

@@ -25,9 +25,13 @@
     <div class="container">
         <a href="index.html" class="back-arrow">← Back to Home</a>
         <h1>UEQ-S - Complete</h1>
-        <p>Please rate the system based on the following adjective pairs.</p>
+        <p>Please enter your participant ID and condition ID before submitting.</p>
 
-        <form>
+        <!-- Input fields for participant ID and condition -->
+        <input type="text" id="participantId" class="input-field" placeholder="Participant ID" required>
+        <input type="text" id="conditionId" class="input-field" placeholder="Condition ID" required>
+
+        <form id="ueqsForm">
 
             <!-- Generate UEQ-S Questions using JavaScript -->
             <script>
@@ -71,7 +75,7 @@
 
     <script>
         function saveCSV() {
-            const form = document.getElementById("susForm");
+            const form = document.getElementById("ueqsForm");
             const responses = [];
             
             // Column headers

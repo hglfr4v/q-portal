@@ -26,9 +26,13 @@
     <div class="container">
         <a href="index.html" class="back-arrow">← Back to Home</a>
         <h1>NASA-TLX - Task Load Index</h1>
-        <p>Please rate the task based on the following scales.</p>
+        <p>Please enter your participant ID and condition ID before submitting.</p>
 
-        <form>
+        <!-- Input fields for participant ID and condition -->
+        <input type="text" id="participantId" class="input-field" placeholder="Participant ID" required>
+        <input type="text" id="conditionId" class="input-field" placeholder="Condition ID" required>
+
+        <form id="nasaForm">
 
             <!-- Generate NASA-TLX Questions using JavaScript -->
             <script>
@@ -65,6 +69,38 @@
 
         </form>
     </div>
+
+    <script>
+        function saveExcel() {
+            const form = document.getElementById("nasaForm");
+            const participantId = document.getElementById("participantId").value.trim();
+            const conditionId = document.getElementById("conditionId").value.trim();
+
+            if (!participantId || !conditionId) {
+                alert("Please enter both Participant ID and Condition ID.");
+                return;
+            }
+
+            const responses = [];
+
+            // Collect responses
+            for (let i = 1; i <= 10; i++) {
+                const selected = form.querySelector(`input[name="q${i}"]:checked`);
+                const value = selected ? selected.value : "";
+                responses.push({ UEQindex: i, value: value });
+            }
+
+            // Create and save the Excel file
+            const worksheet = XLSX.utils.json_to_sheet(responses);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Responses");
+
+            const filename = `nasa_${participantId}_${conditionId}.xlsx`;
+            XLSX.writeFile(workbook, filename);
+
+            alert(`Responses saved to ${filename}!`);
+        }
+    </script>
 
 </body>
 </html>
