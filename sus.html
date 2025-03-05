@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUS - System Usability Scale</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script> <!-- Include XLSX Library -->
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+        .back-arrow { text-decoration: none; font-size: 18px; font-weight: bold; display: block; margin-bottom: 20px; color: #007bff; text-align: left; }
+        .back-arrow:hover { color: #0056b3; }
+        .question-container { margin-bottom: 20px; }
+        .question-container p { font-size: 20px; font-weight: bold; } /* Increased font size */
+        .radio-group { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .radio-table { width: 80%; border-collapse: collapse; border-radius: 3px; overflow: hidden; text-align: center; }
+        .radio-table td { padding: 10px; border: 1px solid #ccc; }
+        .radio-table input { transform: scale(1.5); } /* Larger radio buttons */
+        .scale-labels { display: flex; justify-content: space-between; width: 80%; font-weight: bold; }
+        .submit-container { text-align: center; margin-top: 20px; } /* Centering the button */
+        .submit-btn { display: inline-block; width: 60%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .submit-btn:hover { background-color: #0056b3; }
+        .input-field { margin: 10px 0; padding: 10px; width: 50%; border: 1px solid #ccc; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-arrow">← Back to Home</a>
+        <h1>SUS - System Usability Scale</h1>
+        <p>Please enter your participant ID and condition ID before submitting.</p>
+
+        <!-- Input fields for participant ID and condition -->
+        <input type="text" id="participantId" class="input-field" placeholder="Participant ID" required>
+        <input type="text" id="conditionId" class="input-field" placeholder="Condition ID" required>
+
+        <form id="susForm">
+
+            <script>
+                const questions = [
+                    "I think that I would like to use this system frequently.",
+                    "I found the system unnecessarily complex.",
+                    "I thought the system was easy to use.",
+                    "I think that I would need the support of a technical person to use this system.",
+                    "I found the various functions in this system were well integrated.",
+                    "I thought there was too much inconsistency in this system.",
+                    "I would imagine that most people would learn to use this system very quickly.",
+                    "I found the system very cumbersome to use.",
+                    "I felt very confident using the system.",
+                    "I needed to learn a lot of things before I could get going with this system."
+                ];
+
+                const scaleLabels = ["Strongly Disagree", "Strongly Agree"];
+
+                document.write(questions.map((q, index) => `
+                    <div class="question-container">
+                        <p>${q}</p>
+                        <div class="radio-group">
+                            <div class="scale-labels"><span>${scaleLabels[0]}</span><span>${scaleLabels[1]}</span></div>
+                            <table class="radio-table">
+                                <tr>
+                                    ${Array.from({ length: 5 }, (_, i) => `
+                                        <td><input type="radio" name="q${index + 1}" value="${i + 1}"></td>
+                                    `).join("")}
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                `).join(""));
+            </script>
+
+            <div class="submit-container">
+                <button type="button" class="submit-btn" onclick="saveExcel()">Submit</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        function saveExcel() {
+            const form = document.getElementById("susForm");
+            const participantId = document.getElementById("participantId").value.trim();
+            const conditionId = document.getElementById("conditionId").value.trim();
+
+            if (!participantId || !conditionId) {
+                alert("Please enter both Participant ID and Condition ID.");
+                return;
+            }
+
+            const responses = [];
+
+            // Collect responses
+            for (let i = 1; i <= 10; i++) {
+                const selected = form.querySelector(`input[name="q${i}"]:checked`);
+                const value = selected ? selected.value : "";
+                responses.push({ UEQindex: i, value: value });
+            }
+
+            // Create and save the Excel file
+            const worksheet = XLSX.utils.json_to_sheet(responses);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Responses");
+
+            const filename = `sus_${participantId}_${conditionId}.xlsx`;
+            XLSX.writeFile(workbook, filename);
+
+            alert(`Responses saved to ${filename}!`);
+        }
+    </script>
+
+</body>
+</html>
