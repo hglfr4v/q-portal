@@ -37,7 +37,7 @@
 
             <!-- Loop through all 26 questions -->
             <script>
-                const questions = [
+                const questionsUEQ = [
                     ["Annoying", "Enjoyable"],
                     ["Not Understandable", "Understandable"],
                     ["Creative", "Dull"],
@@ -66,24 +66,24 @@
                     ["Conservative", "Innovative"]
                 ];
 
-                document.write(questions.map((pair, index) => `
-                    <div class="question-container">
-                        <div class="radio-group">
-                            <div class="scale-labels"><span>${pair[0]}</span><span>${pair[1]}</span></div>
-                            <table class="radio-table">
-                                <tr>
-                                    <td><input type="radio" name="q${index + 1}" value="1"></td>
-                                    <td><input type="radio" name="q${index + 1}" value="2"></td>
-                                    <td><input type="radio" name="q${index + 1}" value="3"></td>
-                                    <td><input type="radio" name="q${index + 1}" value="4"></td>
-                                    <td><input type="radio" name="q${index + 1}" value="5"></td>
-                                    <td><input type="radio" name="q${index + 1}" value="6"></td>
-                                    <td><input type="radio" name="q${index + 1}" value="7"></td>
-                                </tr>
-                            </table>
-                        </div>
+                document.write(questionsUEQ.map((pair, index) => `
+                <div class="question-container">
+                    <div class="radio-group">
+                        <div class="scale-labels"><span>${pair[0]}</span><span>${pair[1]}</span></div>
+                        <table class="radio-table">
+                            <tr>
+                                <td><input type="radio" name="q${index + 7}" value="1"></td>
+                                <td><input type="radio" name="q${index + 7}" value="2"></td>
+                                <td><input type="radio" name="q${index + 7}" value="3"></td>
+                                <td><input type="radio" name="q${index + 7}" value="4"></td>
+                                <td><input type="radio" name="q${index + 7}" value="5"></td>
+                                <td><input type="radio" name="q${index + 7}" value="6"></td>
+                                <td><input type="radio" name="q${index + 7}" value="7"></td>
+                            </tr>
+                        </table>
                     </div>
-                `).join(""));
+                </div>
+            `).join(""));
             </script>
 
             <div class="submit-container">
@@ -95,33 +95,43 @@
 
     <script>
         function saveExcel() {
-            const form = document.getElementById("ueqForm");
-            const participantId = document.getElementById("participantId").value.trim();
-            const conditionId = document.getElementById("conditionId").value.trim();
-
+            event.preventDefault(); // Prevent default form submission
+    
+            let participantId = document.getElementById("participantId").value.trim();
+            let conditionId = document.getElementById("conditionId").value.trim();
+    
             if (!participantId || !conditionId) {
                 alert("Please enter both Participant ID and Condition ID.");
                 return;
             }
+    
+            let data = [["PID", participantId], ["CID", conditionId]];
+        
+    
+            // Collect UEQ-S responses
+            const questionsUEQ = [
+                "UEQ1", "UEQ2", "UEQ3", "UEQ4", "UEQ5", "UEQ6", "UEQ7", "UEQ8",
+                "UEQ9", "UEQ10", "UEQ11", "UEQ12", "UEQ13", "UEQ14", "UEQ15", "UEQ16",
+                "UEQ17", "UEQ18", "UEQ19", "UEQ20", "UEQ21", "UEQ22", "UEQ23", "UEQ24",
+                "UEQ25", "UEQ26"
+            ];
+    
+            questionsUEQ.forEach((question, index) => {
+                let selectedValue = document.querySelector(`input[name="q${index + 1}"]:checked`);
+                data.push([question, selectedValue ? selectedValue.value : " "]);
+            });
 
-            const responses = [];
-
-            // Collect responses
-            for (let i = 1; i <= 10; i++) {
-                const selected = form.querySelector(`input[name="q${i}"]:checked`);
-                const value = selected ? selected.value : "";
-                responses.push({ UEQindex: i, value: value });
-            }
-
-            // Create and save the Excel file
-            const worksheet = XLSX.utils.json_to_sheet(responses);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Responses");
-
-            const filename = `sus_${participantId}_${conditionId}.xlsx`;
-            XLSX.writeFile(workbook, filename);
-
-            alert(`Responses saved to ${filename}!`);
+    
+            // Convert data to a worksheet
+            let ws = XLSX.utils.aoa_to_sheet(data);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
+    
+            // Save as Excel file
+            let fileName = `Survey_${conditionId}_${participantId}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+    
+            alert("Data saved successfully as " + fileName);
         }
     </script>
 

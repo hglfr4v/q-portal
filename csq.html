@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA-TLX - Task Load Index</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>CSQ-VR Questionnaire</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
         .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
         .back-arrow { text-decoration: none; font-size: 18px; font-weight: bold; display: block; margin-bottom: 20px; color: #007bff; text-align: left; }
         .back-arrow:hover { color: #0056b3; }
+        .hr {border: 10px solid black; width: 80%;}
         .question-container { margin-bottom: 20px; }
         .question-container p { font-size: 20px; font-weight: bold; } /* Increased font size */
         .radio-group { display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -26,43 +28,46 @@
 
     <div class="container">
         <a href="index.html" class="back-arrow">← Back to Home</a>
-        <h1>Task Load Index - NASA-TLX</h1>
+        
         <p>Please enter your participant ID and condition ID before submitting.</p>
 
         <!-- Input fields for participant ID and condition -->
         <input type="text" id="participantId" class="input-field" placeholder="Participant ID" required>
         <input type="text" id="conditionId" class="input-field" placeholder="Condition ID" required>
 
-        <form id="nasaForm">
+        <form id="pbForm">
+            
+<h2>CyberSickness in Virtual Reality Questionnaire CSQ-VR</h2>
+<script>
+    const questionsCSQVR = [
+        ["Nausea A: Do you experience nausea (e.g., stomach pain, acid reflux, or tension to vomit)?", "Absent Feeling", "Extreme Feeling"],
+        ["Nausea B: Do you experience dizziness (e.g., light-headedness or spinning feeling)?", "Absent Feeling", "Extreme Feeling"],
+        ["Vestibular A: Do you experience disorientation (e.g., spatial confusion or vertigo)?", "Absent Feeling", "Extreme Feeling"],
+        ["Vestibular B: Do you experience postural instability (i.e., imbalance)?", "Absent Feeling", "Extreme Feeling"],
+        ["Oculomotor A: Do you experience a visually induced fatigue (e.g., feeling of tiredness or sleepiness)?", "Absent Feeling", "Extreme Feeling"],
+        ["Oculomotor B: Do you experience a visually induced discomfort (e.g., eyestrain, blurred vision, or headache)?", "Absent Feeling", "Extreme Feeling"]
+    ];
 
-            <!-- Generate NASA-TLX Questions using JavaScript -->
-            <script>
-                const questions = [
-                    ["Mental Demand", "How mentally demanding was the task?", "Very Low", "Very High"],
-                    ["Physical Demand", "How physically demanding was the task?", "Very Low", "Very High"],
-                    ["Temporal Demand", "How hurried or rushed was the pace of the task?", "Very Low", "Very High"],
-                    ["Performance", "How successful were you in accomplishing what you were asked to do?", "Perfect", "Failure"],
-                    ["Effort", "How hard did you have to work to accomplish your level of performance?", "Very Low", "Very High"],
-                    ["Frustration", "How insecure, discouraged, irritated, stressed, and annoyed were you?", "Very Low", "Very High"]
-                ];
+    document.write(questionsCSQVR.map((q, index) => `
+        <div class="question-container">
+            <p><strong>${q[0]}</strong></p>
+            <div class="radio-group">
+                <div class="scale-labels"><span>${q[1]}</span><span>${q[2]}</span></div>
+                <table class="radio-table">
+                    <tr>
+                        ${Array.from({ length: 7 }, (_, i) => `
+                            <td><input type="radio" name="csq${index + 1}" value="${i + 1}"></td>
+                        `).join("")}
+                    </tr>
+                </table>
+            </div>
+        </div>
+    `).join(""));
 
-                document.write(questions.map((q, index) => `
-                    <div class="question-container">
-                        <h3>${q[0]}</h3>
-                        <p>${q[1]}</p>
-                        <div class="radio-group">
-                            <div class="scale-labels"><span>${q[2]}</span><span>${q[3]}</span></div>
-                            <table class="radio-table">
-                                <tr>
-                                    ${Array.from({ length: 21 }, (_, i) => `
-                                        <td><input type="radio" name="q${index + 1}" value="${i + 1}"></td>
-                                    `).join("")}
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                `).join(""));
-            </script>
+</script>
+
+               
+           
 
             <div class="submit-container">
                 <button type="submit" class="submit-btn" onclick="saveExcel()">Submit</button>
@@ -85,16 +90,16 @@
     
             let data = [["PID", participantId], ["CID", conditionId]];
             
-            // Collect NASA-TLX responses
-            const questionsNasa = [
-                "NASA1", "NASA2", "NASA3", "NASA4", "NASA5", "NASA6"
+            // Collect CSQ-VR responses
+            const questionsCSQVR = [
+                "CSQVR1", "CSQVR2", "CSQVR3", "CSQVR4", "CSQVR5", "CSQVR6"
             ];
-    
-            questionsNasa.forEach((question, index) => {
-                let selectedValue = document.querySelector(`input[name="q${index + 1}"]:checked`);
+
+            questionsCSQVR.forEach((question, index) => {
+                let selectedValue = document.querySelector(`input[name="csq${index + 1}"]:checked`);
                 data.push([question, selectedValue ? selectedValue.value : " "]);
             });
-             
+    
             // Convert data to a worksheet
             let ws = XLSX.utils.aoa_to_sheet(data);
             let wb = XLSX.utils.book_new();

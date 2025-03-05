@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA-TLX - Task Load Index</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>PB Condition</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
         .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
         .back-arrow { text-decoration: none; font-size: 18px; font-weight: bold; display: block; margin-bottom: 20px; color: #007bff; text-align: left; }
         .back-arrow:hover { color: #0056b3; }
+        .hr {border: 10px solid black; width: 80%;}
         .question-container { margin-bottom: 20px; }
         .question-container p { font-size: 20px; font-weight: bold; } /* Increased font size */
         .radio-group { display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -25,19 +27,19 @@
 <body>
 
     <div class="container">
-        <a href="index.html" class="back-arrow">← Back to Home</a>
-        <h1>Task Load Index - NASA-TLX</h1>
+        <a href="experiment.html" class="back-arrow">← Back to Home</a>
+        
         <p>Please enter your participant ID and condition ID before submitting.</p>
 
         <!-- Input fields for participant ID and condition -->
         <input type="text" id="participantId" class="input-field" placeholder="Participant ID" required>
         <input type="text" id="conditionId" class="input-field" placeholder="Condition ID" required>
 
-        <form id="nasaForm">
-
+        <form id="pbForm">
+            <h2>Task Load Index - NASA-TLX</h2>
             <!-- Generate NASA-TLX Questions using JavaScript -->
             <script>
-                const questions = [
+                const questionsNasa = [
                     ["Mental Demand", "How mentally demanding was the task?", "Very Low", "Very High"],
                     ["Physical Demand", "How physically demanding was the task?", "Very Low", "Very High"],
                     ["Temporal Demand", "How hurried or rushed was the pace of the task?", "Very Low", "Very High"],
@@ -46,7 +48,7 @@
                     ["Frustration", "How insecure, discouraged, irritated, stressed, and annoyed were you?", "Very Low", "Very High"]
                 ];
 
-                document.write(questions.map((q, index) => `
+                document.write(questionsNasa.map((q, index) => `
                     <div class="question-container">
                         <h3>${q[0]}</h3>
                         <p>${q[1]}</p>
@@ -63,6 +65,43 @@
                     </div>
                 `).join(""));
             </script>
+            <hr>
+             <h2>User Experience Questionnaire (short) - UEQ-S</h2>
+
+                 <script>
+                    const questionsUEQ_S = [
+                    ["Obstructive", "Supportive"],
+                    ["Complicated", "Easy"],
+                    ["Inefficient", "Efficient"],
+                    ["Confusing", "Clear"],
+                    ["Boring", "Exciting"],
+                    ["Not Interesting", "Interesting"],
+                    ["Conventional", "Inventive"],
+                    ["Usual", "Leading Edge"]
+                ];
+
+                    document.write(questionsUEQ_S.map((pair, index) => `
+                    <div class="question-container">
+                        <div class="radio-group">
+                            <div class="scale-labels"><span>${pair[0]}</span><span>${pair[1]}</span></div>
+                            <table class="radio-table">
+                                <tr>
+                                    <td><input type="radio" name="q${index + 7}" value="1"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="2"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="3"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="4"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="5"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="6"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="7"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                `).join(""));
+                 </script> 
+
+               
+           
 
             <div class="submit-container">
                 <button type="submit" class="submit-btn" onclick="saveExcel()">Submit</button>
@@ -94,7 +133,17 @@
                 let selectedValue = document.querySelector(`input[name="q${index + 1}"]:checked`);
                 data.push([question, selectedValue ? selectedValue.value : " "]);
             });
-             
+    
+            // Collect UEQ-S responses
+            const questionsUEQ_S = [
+                "UEQ1", "UEQ2", "UEQ3", "UEQ4", "UEQ5", "UEQ6", "UEQ7", "UEQ8"
+            ];
+    
+            questionsUEQ_S.forEach((question, index) => {
+                let selectedValue = document.querySelector(`input[name="q${index + 7}"]:checked`);
+                data.push([question, selectedValue ? selectedValue.value : " "]);
+            });
+    
             // Convert data to a worksheet
             let ws = XLSX.utils.aoa_to_sheet(data);
             let wb = XLSX.utils.book_new();

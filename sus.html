@@ -37,7 +37,7 @@
         <form id="susForm">
 
             <script>
-                const questions = [
+                const questionsSUS = [
                     "I think that I would like to use this system frequently.",
                     "I found the system unnecessarily complex.",
                     "I thought the system was easy to use.",
@@ -49,10 +49,10 @@
                     "I felt very confident using the system.",
                     "I needed to learn a lot of things before I could get going with this system."
                 ];
-
+            
                 const scaleLabels = ["Strongly Disagree", "Strongly Agree"];
-
-                document.write(questions.map((q, index) => `
+            
+                document.write(questionsSUS.map((q, index) => `
                     <div class="question-container">
                         <p>${q}</p>
                         <div class="radio-group">
@@ -60,7 +60,7 @@
                             <table class="radio-table">
                                 <tr>
                                     ${Array.from({ length: 5 }, (_, i) => `
-                                        <td><input type="radio" name="q${index + 1}" value="${i + 1}"></td>
+                                        <td><input type="radio" name="q${index + 15}" value="${i + 1}"></td>
                                     `).join("")}
                                 </tr>
                             </table>
@@ -78,33 +78,37 @@
 
     <script>
         function saveExcel() {
-            const form = document.getElementById("susForm");
-            const participantId = document.getElementById("participantId").value.trim();
-            const conditionId = document.getElementById("conditionId").value.trim();
-
+            event.preventDefault(); // Prevent default form submission
+    
+            let participantId = document.getElementById("participantId").value.trim();
+            let conditionId = document.getElementById("conditionId").value.trim();
+    
             if (!participantId || !conditionId) {
                 alert("Please enter both Participant ID and Condition ID.");
                 return;
             }
+    
+            let data = [["PID", participantId], ["CID", conditionId]];
 
-            const responses = [];
+            const questionsSUS = [
+                "SUS1", "SUS2", "SUS3", "SUS4", "SUS5", "SUS6", "SUS7", "SUS8", "SUS9", "SUS10"
+            ];
+    
+            questionsSUS.forEach((question, index) => {
+                let selectedValue = document.querySelector(`input[name="q${index + 1}"]:checked`);
+                data.push([question, selectedValue ? selectedValue.value : " "]);
+            });
 
-            // Collect responses
-            for (let i = 1; i <= 10; i++) {
-                const selected = form.querySelector(`input[name="q${i}"]:checked`);
-                const value = selected ? selected.value : "";
-                responses.push({ UEQindex: i, value: value });
-            }
-
-            // Create and save the Excel file
-            const worksheet = XLSX.utils.json_to_sheet(responses);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Responses");
-
-            const filename = `sus_${participantId}_${conditionId}.xlsx`;
-            XLSX.writeFile(workbook, filename);
-
-            alert(`Responses saved to ${filename}!`);
+             // Convert data to a worksheet
+             let ws = XLSX.utils.aoa_to_sheet(data);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
+    
+            // Save as Excel file
+            let fileName = `Survey_${conditionId}_${participantId}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+    
+            alert("Data saved successfully as " + fileName);
         }
     </script>
 
