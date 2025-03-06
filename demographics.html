@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>Demographics </title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+        .back-arrow { text-decoration: none; font-size: 18px; font-weight: bold; display: block; margin-bottom: 20px; color: #007bff; text-align: left; }
+        .back-arrow:hover { color: #0056b3; }
+        .question-container { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px; text-align: left; }
+        .question-container p { font-size: 20px; font-weight: bold; } /* Increased font size */
+        .radio-group { display: flex; flex-direction: column; align-items: flex-start; }
+        .radio-group label { display: flex; display: flex;  align-items: center; gap: 10px; cursor: pointer; width: 100%;}
+        .radio-group input[type="radio"] { margin: 0; }
+        .radio-table { width: 100%; border-collapse: collapse; border-radius: 3x; overflow: hidden; text-align: center; }
+        .radio-table td { padding: 10px; border: 1px solid #ccc; }
+        .radio-table input { transform: scale(1.5); } /* Larger radio buttons */
+        .scale-labels { display: flex; justify-content: space-between; width: 100%; font-weight: bold; }
+        .submit-container { text-align: center; margin-top: 20px; } /* Centering the button */
+        .submit-btn { display: inline-block; width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .submit-btn:hover { background-color: #0056b3; }
+        .input-field { margin: 10px 0; padding: 10px; width: 90%; border: 1px solid #ccc; border-radius: 5px; }
+       /* .input-field { width: 100%; padding: 5px; margin-top: 5px; }*/
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-arrow">← Back to Home</a>
+        <h1>Demographics Questionnaire</h1>
+        <p>Please enter your information.</p>
+
+        <form id="demographicsForm">
+                    <div class="question-container">
+                        <label for="participantId"><strong>Participant ID:</strong></label>
+                        <input type="text" id="participantId" name="participantId" class="input-field" placeholder="Participant ID eingeben">
+                    </div>
+            
+                    <div class="question-container">
+                        <label for="age"><strong>1. Bitte geben Sie Ihr Alter an.</strong></label>
+                        <input type="number" id="age" name="age" class="input-field" placeholder="Alter eingeben">
+                    </div>
+            
+                    <div class="question-container">
+                        <strong>2. Bitte geben Sie Ihr Geschlecht an.</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="gender" value="Weiblich"> Weiblich</label>
+                            <label><input type="radio" name="gender" value="Männlich"> Männlich</label>
+                            <label><input type="radio" name="gender" value="Divers"> Divers</label>
+                            <label><input type="radio" name="gender" value="Keine Angabe"> Keine Angabe</label>
+                        </div>
+                    </div>
+            
+                    <div class="question-container">
+                        <label for="flightHours"><strong>3. Wie viele Flugstunden haben Sie insgesamt mit dem Waffensystem Eurofighter absolviert?</strong></label>
+                        <input type="number" id="flightHours" name="flightHours" class="input-field" placeholder="Flugstunden eingeben">
+                    </div>
+            
+                    <div class="question-container">
+                        <label for="flightExperience"><strong>4. Wie viele Jahre Flugerfahrung haben Sie insgesamt, unabhängig vom Waffensystem Eurofighter?</strong></label>
+                        <input type="number" id="flightExperience" name="flightExperience" class="input-field" placeholder="Jahre eingeben">
+                    </div>
+            
+                    <div class="question-container">
+                        <strong>5. Haben Sie bereits Erfahrung mit Virtual Reality (VR), Augmented Reality (AR) oder Mixed Reality (MR) gesammelt?</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="vrExperience" value="Ja, mehrmals im Monat oder häufiger"> Ja, mehrmals im Monat oder häufiger (z.B. regelmäßige Nutzung in der Freizeit oder im beruflichen Kontext)</label>
+                            <label><input type="radio" name="vrExperience" value="Ja, gelegentlich"> Ja, gelegentlich (z.B. ein paar Mal pro Jahr)</label>
+                            <label><input type="radio" name="vrExperience" value="Nein"> Nein, bisher keine Erfahrung</label>
+                        </div>
+                    </div>
+
+            
+                    <div class="question-container">
+                        <strong>6. Haben Sie Virtual Reality (VR), Augmented Reality (AR) oder Mixed Reality (MR) bereits für berufliche Trainingszwecke genutzt?</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="vrTraining" value="Ja, regelmäßig"> Ja, regelmäßig (z.B. in wiederkehrenden Trainingseinheiten)</label>
+                            <label><input type="radio" name="vrTraining" value="Ja, sporadisch"> Ja, sporadisch (z.B. als Teil eines einmaligen oder seltenen Trainings)</label>
+                            <label><input type="radio" name="vrTraining" value="Nein"> Nein, bisher keine Erfahrung</label>
+                        </div>
+                    </div>
+
+
+            <div class="submit-container">
+                <button type="submit" class="submit-btn" onclick="saveExcel()">Submit</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+function saveExcel() {
+        event.preventDefault(); // Prevent default form submission
+        // Ensure participant ID is not empty
+        let participantId = document.getElementById("participantId").value.trim();
+        if (!participantId) {
+        participantId = "Unknown_Participant"; // Default filename if no ID is entered
+        }
+        let data = [];
+        function collectDemographicData(data) {
+                    let participantId = document.getElementById("participantId").value.trim();
+                    let age = document.getElementById("age").value.trim();
+                    let flightHours = document.getElementById("flightHours").value.trim();
+                    let flightExperience = document.getElementById("flightExperience").value.trim();
+            
+                    let gender = document.querySelector(`input[name="gender"]:checked`);
+                    let vrExperience = document.querySelector(`input[name="vrExperience"]:checked`);
+                    let vrTraining = document.querySelector(`input[name="vrTraining"]:checked`);
+            
+                    data.push(["Participant ID", participantId || "Not Provided"]);
+                    data.push(["Age", age || "Not Provided"]);
+                    data.push(["Gender", gender ? gender.value : "Not Provided"]);
+                    data.push(["Flight Hours (Eurofighter)", flightHours || "Not Provided"]);
+                    data.push(["Flight Experience (Years)", flightExperience || "Not Provided"]);
+                    data.push(["VR/AR/MR Experience", vrExperience ? vrExperience.value : "Not Provided"]);
+                    data.push(["VR/AR/MR Training Experience", vrTraining ? vrTraining.value : "Not Provided"]);
+                    // Convert data to a worksheet
+        
+                }
+
+                collectDemographicData(data);
+                let ws = XLSX.utils.aoa_to_sheet(data);
+                let wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
+
+                // Save as Excel file
+                let fileName = `Survey_${participantId}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                alert("Data saved successfully as " + fileName);
+    }
+    </script>   
+</body>
+</html>
