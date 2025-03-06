@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>VR Condition</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+        .back-arrow { text-decoration: none; font-size: 18px; font-weight: bold; display: block; margin-bottom: 20px; color: #007bff; text-align: left; }
+        .back-arrow:hover { color: #0056b3; }
+        .hr {border: 10px solid black; width: 80%;}
+        .question-container { margin-bottom: 20px; }
+        .question-container p { font-size: 20px; font-weight: bold; } /* Increased font size */
+        .radio-group { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .radio-table { width: 100%; border-collapse: collapse; border-radius: 3px; overflow: hidden; text-align: center; }
+        .radio-table td { padding: 10px; border: 1px solid #ccc; }
+        .radio-table input { transform: scale(1.5); } /* Larger radio buttons */
+        .scale-labels { display: flex; justify-content: space-between; width: 100%; font-weight: bold; }
+        .submit-container { text-align: center; margin-top: 20px; } /* Centering the button */
+        .submit-btn { display: inline-block; width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .submit-btn:hover { background-color: #0056b3; }
+        .input-field { margin: 10px 0; padding: 10px; width: 50%; border: 1px solid #ccc; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="qomexexp.html" class="back-arrow">← Back to Home</a>
+        
+        <p>Please enter your participant ID and condition ID before submitting.</p>
+
+        <!-- Input fields for participant ID and condition -->
+        <input type="text" id="participantId" class="input-field" placeholder="Participant ID" required>
+        <input type="text" id="conditionId" class="input-field" placeholder="Condition ID" required>
+
+        <form id="pbForm">
+            <h2>Task Load Index - NASA-TLX</h2>
+            <!-- Generate NASA-TLX Questions using JavaScript -->
+            <script>
+                const questionsNasa = [
+                    ["Mental Demand", "How mentally demanding was the task?", "Very Low", "Very High"],
+                    ["Physical Demand", "How physically demanding was the task?", "Very Low", "Very High"],
+                    ["Temporal Demand", "How hurried or rushed was the pace of the task?", "Very Low", "Very High"],
+                    ["Performance", "How successful were you in accomplishing what you were asked to do?", "Perfect", "Failure"],
+                    ["Effort", "How hard did you have to work to accomplish your level of performance?", "Very Low", "Very High"],
+                    ["Frustration", "How insecure, discouraged, irritated, stressed, and annoyed were you?", "Very Low", "Very High"]
+                ];
+
+                document.write(questionsNasa.map((q, index) => `
+                    <div class="question-container">
+                        <h3>${q[0]}</h3>
+                        <p>${q[1]}</p>
+                        <div class="radio-group">
+                            <div class="scale-labels"><span>${q[2]}</span><span>${q[3]}</span></div>
+                            <table class="radio-table">
+                                <tr>
+                                    ${Array.from({ length: 21 }, (_, i) => `
+                                        <td><input type="radio" name="q${index + 1}" value="${i + 1}"></td>
+                                    `).join("")}
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                `).join(""));
+            </script>
+            <hr>
+             <h2>User Experience Questionnaire (short) - UEQ-S</h2>
+
+                 <script>
+                    const questionsUEQ_S = [
+                    ["Obstructive", "Supportive"],
+                    ["Complicated", "Easy"],
+                    ["Inefficient", "Efficient"],
+                    ["Confusing", "Clear"],
+                    ["Boring", "Exciting"],
+                    ["Not Interesting", "Interesting"],
+                    ["Conventional", "Inventive"],
+                    ["Usual", "Leading Edge"]
+                ];
+
+                    document.write(questionsUEQ_S.map((pair, index) => `
+                    <div class="question-container">
+                        <div class="radio-group">
+                            <div class="scale-labels"><span>${pair[0]}</span><span>${pair[1]}</span></div>
+                            <table class="radio-table">
+                                <tr>
+                                    <td><input type="radio" name="q${index + 7}" value="1"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="2"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="3"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="4"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="5"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="6"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="7"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                `).join(""));
+                 </script> 
+                 
+<hr>
+<h2>iGroup Presence Questionnaire - IPQ</h2>
+
+<script>
+    const questionsIPQ = [
+        ["In the computer-generated world I had a sense of 'being there'.", "Not at all", "Very much"],
+        ["Somehow I felt that the virtual world surrounded me.", "Fully disagree", "Fully agree"],
+        ["I felt like I was just perceiving pictures.", "Fully disagree", "Fully agree"],
+        ["I did not feel present in the virtual space.", "Did not feel", "Felt present"],
+        ["I had a sense of acting in the virtual space, rather than operating something from outside.", "Fully disagree", "Fully agree"],
+        ["I felt present in the virtual space.", "Fully disagree", "Fully agree"],
+        ["How aware were you of the real world surrounding while navigating in the virtual world?", "Extremely aware", "Not aware at all"],
+        ["I was not aware of my real environment.", "Fully disagree", "Fully agree"],
+        ["I still paid attention to the real environment.", "Fully disagree", "Fully agree"],
+        ["I was completely captivated by the virtual world.", "Fully disagree", "Fully agree"],
+        ["How real did the virtual world seem to you?", "Completely real", "Not real at all"],
+        ["How much did your experience in the virtual environment seem consistent with your real world experience?", "Not consistent", "Very consistent"],
+        ["How real did the virtual world seem to you?", "About as real as an imagined world", "Indistinguishable from the real world"],
+        ["The virtual world seemed more realistic than the real world.", "Fully disagree", "Fully agree"]
+    ];
+
+    document.write(questionsIPQ.map((q, index) => `
+        <div class="question-container">
+            <p><strong>${q[0]}</strong></p>
+            <div class="radio-group">
+                <div class="scale-labels"><span>${q[1]}</span><span>${q[2]}</span></div>
+                <table class="radio-table">
+                    <tr>
+                        ${Array.from({ length: 7 }, (_, i) => `
+                            <td><input type="radio" name="q${index + 26}" value="${i + 1}"></td>
+                        `).join("")}
+                    </tr>
+                </table>
+            </div>
+        </div>
+    `).join(""));
+</script>
+<hr>
+<h2>CyberSickness in Virtual Reality Questionnaire CSQ-VR</h2>
+<script>
+    const questionsCSQVR = [
+        ["Nausea A: Do you experience nausea (e.g., stomach pain, acid reflux, or tension to vomit)?", "Absent Feeling", "Extreme Feeling"],
+        ["Nausea B: Do you experience dizziness (e.g., light-headedness or spinning feeling)?", "Absent Feeling", "Extreme Feeling"],
+        ["Vestibular A: Do you experience disorientation (e.g., spatial confusion or vertigo)?", "Absent Feeling", "Extreme Feeling"],
+        ["Vestibular B: Do you experience postural instability (i.e., imbalance)?", "Absent Feeling", "Extreme Feeling"],
+        ["Oculomotor A: Do you experience a visually induced fatigue (e.g., feeling of tiredness or sleepiness)?", "Absent Feeling", "Extreme Feeling"],
+        ["Oculomotor B: Do you experience a visually induced discomfort (e.g., eyestrain, blurred vision, or headache)?", "Absent Feeling", "Extreme Feeling"]
+    ];
+
+    document.write(questionsCSQVR.map((q, index) => `
+        <div class="question-container">
+            <p><strong>${q[0]}</strong></p>
+            <div class="radio-group">
+                <div class="scale-labels"><span>${q[1]}</span><span>${q[2]}</span></div>
+                <table class="radio-table">
+                    <tr>
+                        ${Array.from({ length: 7 }, (_, i) => `
+                            <td><input type="radio" name="csq${index + 41}" value="${i + 1}"></td>
+                        `).join("")}
+                    </tr>
+                </table>
+            </div>
+        </div>
+    `).join(""));
+
+</script>
+
+               
+           
+
+            <div class="submit-container">
+                <button type="submit" class="submit-btn" onclick="saveExcel()">Submit</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        function saveExcel() {
+            event.preventDefault(); // Prevent default form submission
+    
+            let participantId = document.getElementById("participantId").value.trim();
+            let conditionId = document.getElementById("conditionId").value.trim();
+    
+            if (!participantId || !conditionId) {
+                alert("Please enter both Participant ID and Condition ID.");
+                return;
+            }
+    
+            let data = [["PID", participantId], ["CID", conditionId]];
+            
+            // Collect NASA-TLX responses
+            const questionsNasa = [
+                "NASA1", "NASA2", "NASA3", "NASA4", "NASA5", "NASA6"
+            ];
+    
+            questionsNasa.forEach((question, index) => {
+                let selectedValue = document.querySelector(`input[name="q${index + 1}"]:checked`);
+                data.push([question, selectedValue ? selectedValue.value : " "]);
+            });
+    
+            // Collect UEQ-S responses
+            const questionsUEQ_S = [
+                "UEQ1", "UEQ2", "UEQ3", "UEQ4", "UEQ5", "UEQ6", "UEQ7", "UEQ8"
+            ];
+    
+            questionsUEQ_S.forEach((question, index) => {
+                let selectedValue = document.querySelector(`input[name="q${index + 7}"]:checked`);
+                data.push([question, selectedValue ? selectedValue.value : " "]);
+            });
+
+            const questionsIPQ = [
+                "IPQ1", "IPQ2", "IPQ3", "IPQ4", "IPQ5", "IPQ6", "IPQ7", "IPQ8", "IPQ9", "IPQ10", "IPQ11", "IPQ12", "IPQ13", "IPQ14"
+            ];
+    
+            questionsIPQ.forEach((question, index) => {
+                let selectedValue = document.querySelector(`input[name="q${index + 16}"]:checked`);
+                data.push([question, selectedValue ? selectedValue.value : " "]);
+            });
+
+            const questionsCSQVR = [
+                "CSQVR1", "CSQVR2", "CSQVR3", "CSQVR4", "CSQVR5", "CSQVR6"
+            ];
+
+            questionsCSQVR.forEach((question, index) => {
+                let selectedValue = document.querySelector(`input[name="csq${index + 31}"]:checked`);
+                data.push([question, selectedValue ? selectedValue.value : " "]);
+            });
+    
+            // Convert data to a worksheet
+            let ws = XLSX.utils.aoa_to_sheet(data);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
+    
+            // Save as Excel file
+            let fileName = `Survey_${conditionId}_${participantId}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+    
+            alert("Data saved successfully as " + fileName);
+        }
+    </script>
+
+</body>
+</html>
