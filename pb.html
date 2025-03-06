@@ -57,7 +57,7 @@
                             <table class="radio-table">
                                 <tr>
                                     ${Array.from({ length: 21 }, (_, i) => `
-                                        <td><input type="radio" name="q${index + 1}" value="${i + 1}"></td>
+                                        <td><input type="radio" name="q${index + 1}" value="${i + 1}" required></td>
                                     `).join("")}
                                 </tr>
                             </table>
@@ -86,7 +86,7 @@
                             <div class="scale-labels"><span>${pair[0]}</span><span>${pair[1]}</span></div>
                             <table class="radio-table">
                                 <tr>
-                                    <td><input type="radio" name="q${index + 7}" value="1"></td>
+                                    <td><input type="radio" name="q${index + 7}" value="1" required></td>
                                     <td><input type="radio" name="q${index + 7}" value="2"></td>
                                     <td><input type="radio" name="q${index + 7}" value="3"></td>
                                     <td><input type="radio" name="q${index + 7}" value="4"></td>
@@ -121,6 +121,31 @@
                 alert("Please enter both Participant ID and Condition ID.");
                 return;
             }
+            let isValid = true;
+        let errors = [];
+      
+    const itemsNASA = 6; // Number of ATI questions
+    for (let i = 1; i <= itemsNASA; i++) {
+        let checked = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!checked) {
+            isValid = false;
+            errors.push(`Please answer question ${i} in the NASA.`);
+        }
+    }
+    const itemsUEQS = 8; // Number of ATI questions
+    for (let i = 7; i <= itemsNASA+itemsUEQS; i++) {
+        let checked = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!checked) {
+            isValid = false;
+            errors.push(`Please answer question ${i-6} in the UEQS.`);
+        }
+    }
+    
+
+    if (!isValid) {
+        alert(errors.join("\n"));
+        return;
+    }
     
             let data = [["PID", participantId], ["CID", conditionId]];
             
