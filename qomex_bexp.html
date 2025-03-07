@@ -37,57 +37,38 @@
 <body>
 
     <div class="container">
-        <a href="experiment.html" class="back-arrow">← Back to Home</a>
+        <a href="qomexexp.html" class="back-arrow">← Back to Home</a>
         <h1>Demographics Questionnaire</h1>
         <p>Please enter your information.</p>
 
         <form id="bexpForm">
                     <div class="question-container">
                         <label for="participantId"><strong>Participant ID:</strong></label>
-                        <input type="text" id="participantId" name="participantId" class="input-field" placeholder="Participant ID eingeben" required>
+                        <input type="text" id="participantId" name="participantId" class="input-field" placeholder="Enter Participant ID" required>
                     </div>
             
                     <div class="question-container">
-                        <label for="age"><strong>1. Bitte geben Sie Ihr Alter an.</strong></label>
-                        <input type="number" id="age" name="age" class="input-field" placeholder="Alter eingeben">
+                        <label for="age"><strong>1. Age:</strong></label>
+                        <input type="number" id="age" name="age" class="input-field" placeholder="Enter age">
                     </div>
             
                     <div class="question-container">
-                        <strong>2. Bitte geben Sie Ihr Geschlecht an.</strong>
+                        <strong>2. Gender</strong>
                         <div class="radio-group">
-                            <label><input type="radio" name="gender" value="Weiblich" required> Weiblich</label>
-                            <label><input type="radio" name="gender" value="Männlich"> Männlich</label>
+                            <label><input type="radio" name="gender" value="Weiblich" required> Woman</label>
+                            <label><input type="radio" name="gender" value="Männlich"> Man</label>
                             <label><input type="radio" name="gender" value="Divers"> Divers</label>
-                            <label><input type="radio" name="gender" value="Keine Angabe"> Keine Angabe</label>
+                            <label><input type="radio" name="gender" value="Keine Angabe"> No Answer</label>
                         </div>
                     </div>
             
                     <div class="question-container">
-                        <label for="flightHours"><strong>3. Wie viele Flugstunden haben Sie insgesamt mit dem Waffensystem Eurofighter absolviert?</strong></label>
-                        <input type="number" id="flightHours" name="flightHours" class="input-field" placeholder="Flugstunden eingeben" required>
-                    </div>
-            
-                    <div class="question-container">
-                        <label for="flightExperience"><strong>4. Wie viele Jahre Flugerfahrung haben Sie insgesamt, unabhängig vom Waffensystem Eurofighter?</strong></label>
-                        <input type="number" id="flightExperience" name="flightExperience" class="input-field" placeholder="Jahre eingeben" required>
-                    </div>
-            
-                    <div class="question-container">
-                        <strong>5. Haben Sie bereits Erfahrung mit Virtual Reality (VR), Augmented Reality (AR) oder Mixed Reality (MR) gesammelt?</strong>
+                        <strong>3. Previous experience with AR/VR systems:</strong>
                         <div class="radio-group">
-                            <label><input type="radio" name="vrExperience" value="Ja, mehrmals im Monat oder häufiger" required> Ja, mehrmals im Monat oder häufiger (z.B. regelmäßige Nutzung in der Freizeit oder im beruflichen Kontext)</label>
-                            <label><input type="radio" name="vrExperience" value="Ja, gelegentlich"> Ja, gelegentlich (z.B. ein paar Mal pro Jahr)</label>
-                            <label><input type="radio" name="vrExperience" value="Nein"> Nein, bisher keine Erfahrung</label>
-                        </div>
-                    </div>
-
-            
-                    <div class="question-container">
-                        <strong>6. Haben Sie Virtual Reality (VR), Augmented Reality (AR) oder Mixed Reality (MR) bereits für berufliche Trainingszwecke genutzt?</strong>
-                        <div class="radio-group">
-                            <label><input type="radio" name="vrTraining" value="Ja, regelmäßig" required> Ja, regelmäßig (z.B. in wiederkehrenden Trainingseinheiten)</label>
-                            <label><input type="radio" name="vrTraining" value="Ja, sporadisch"> Ja, sporadisch (z.B. als Teil eines einmaligen oder seltenen Trainings)</label>
-                            <label><input type="radio" name="vrTraining" value="Nein"> Nein, bisher keine Erfahrung</label>
+                            <label><input type="radio" name="vrExperience" value="no" required> No experience (0h)</label>
+                            <label><input type="radio" name="vrExperience" value="little"> Little experience (1-10h)</label>
+                            <label><input type="radio" name="vrExperience" value="some"> Some experience (11-30h)</label>
+                            <label><input type="radio" name="vrExperience" value="lots"> Lots of experience (31-100h)</label>
                         </div>
                     </div>
 
@@ -152,7 +133,6 @@ function saveExcel() {
     const radioGroups = [
         { name: "gender", label: "Gender" },
         { name: "vrExperience", label: "VR/AR/MR Experience" },
-        { name: "vrTraining", label: "VR/AR/MR Training Experience" }
     ];
 
     radioGroups.forEach(group => {
@@ -184,20 +164,13 @@ function saveExcel() {
         function collectDemographicData(data) {
                     let participantId = document.getElementById("participantId").value.trim();
                     let age = document.getElementById("age").value.trim();
-                    let flightHours = document.getElementById("flightHours").value.trim();
-                    let flightExperience = document.getElementById("flightExperience").value.trim();
-            
                     let gender = document.querySelector(`input[name="gender"]:checked`);
                     let vrExperience = document.querySelector(`input[name="vrExperience"]:checked`);
-                    let vrTraining = document.querySelector(`input[name="vrTraining"]:checked`);
             
                     data.push(["Participant ID", participantId || "Not Provided"]);
                     data.push(["Age", age || "Not Provided"]);
                     data.push(["Gender", gender ? gender.value : "Not Provided"]);
-                    data.push(["Flight Hours (Eurofighter)", flightHours || "Not Provided"]);
-                    data.push(["Flight Experience (Years)", flightExperience || "Not Provided"]);
                     data.push(["VR/AR/MR Experience", vrExperience ? vrExperience.value : "Not Provided"]);
-                    data.push(["VR/AR/MR Training Experience", vrTraining ? vrTraining.value : "Not Provided"]);
                     // Convert data to a worksheet
         
                 }

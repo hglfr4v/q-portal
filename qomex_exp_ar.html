@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <title>VR Condition</title>
+    <title>AR Condition</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
         .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
@@ -129,7 +129,7 @@
                 <table class="radio-table">
                     <tr>
                         ${Array.from({ length: 7 }, (_, i) => `
-                            <td><input type="radio" name="q${index + 26}" value="${i + 1}"></td>
+                            <td><input type="radio" name="q${index + 15}" value="${i + 1}"></td>
                         `).join("")}
                     </tr>
                 </table>
@@ -137,38 +137,7 @@
         </div>
     `).join(""));
 </script>
-<hr>
-<h2>CyberSickness in Virtual Reality Questionnaire CSQ-VR</h2>
-<script>
-    const questionsCSQVR = [
-        ["Nausea A: Do you experience nausea (e.g., stomach pain, acid reflux, or tension to vomit)?", "Absent Feeling", "Extreme Feeling"],
-        ["Nausea B: Do you experience dizziness (e.g., light-headedness or spinning feeling)?", "Absent Feeling", "Extreme Feeling"],
-        ["Vestibular A: Do you experience disorientation (e.g., spatial confusion or vertigo)?", "Absent Feeling", "Extreme Feeling"],
-        ["Vestibular B: Do you experience postural instability (i.e., imbalance)?", "Absent Feeling", "Extreme Feeling"],
-        ["Oculomotor A: Do you experience a visually induced fatigue (e.g., feeling of tiredness or sleepiness)?", "Absent Feeling", "Extreme Feeling"],
-        ["Oculomotor B: Do you experience a visually induced discomfort (e.g., eyestrain, blurred vision, or headache)?", "Absent Feeling", "Extreme Feeling"]
-    ];
-
-    document.write(questionsCSQVR.map((q, index) => `
-        <div class="question-container">
-            <p><strong>${q[0]}</strong></p>
-            <div class="radio-group">
-                <div class="scale-labels"><span>${q[1]}</span><span>${q[2]}</span></div>
-                <table class="radio-table">
-                    <tr>
-                        ${Array.from({ length: 7 }, (_, i) => `
-                            <td><input type="radio" name="csq${index + 41}" value="${i + 1}"></td>
-                        `).join("")}
-                    </tr>
-                </table>
-            </div>
-        </div>
-    `).join(""));
-
-</script>
-
-               
-           
+    
 
             <div class="submit-container">
                 <button type="submit" class="submit-btn" onclick="saveExcel()">Submit</button>
@@ -188,6 +157,39 @@
                 alert("Please enter both Participant ID and Condition ID.");
                 return;
             }
+            let isValid = true;
+        let errors = [];
+      
+    const itemsNASA = 6; // Number of ATI questions
+    for (let i = 1; i <= itemsNASA; i++) {
+        let checked = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!checked) {
+            isValid = false;
+            errors.push(`Please answer question ${i} in the NASA.`);
+        }
+    }
+    const itemsUEQS = 8; // Number of ATI questions
+    for (let i = 7; i <= itemsNASA+itemsUEQS; i++) {
+        let checked = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!checked) {
+            isValid = false;
+            errors.push(`Please answer question ${i-6} in the UEQS.`);
+        }
+    }
+    
+    const itemsIPQ = 14; // Number of ATI questions
+    for (let i = 15; i <= itemsNASA+itemsUEQS+itemsIPQ; i++) {
+        let checked = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!checked) {
+            isValid = false;
+            errors.push(`Please answer question ${i-14} in the IPQ.`);
+        }
+    }
+
+    if (!isValid) {
+        alert(errors.join("\n"));
+        return;
+    }
     
             let data = [["PID", participantId], ["CID", conditionId]];
             
@@ -216,18 +218,10 @@
             ];
     
             questionsIPQ.forEach((question, index) => {
-                let selectedValue = document.querySelector(`input[name="q${index + 16}"]:checked`);
+                let selectedValue = document.querySelector(`input[name="q${index + 15}"]:checked`);
                 data.push([question, selectedValue ? selectedValue.value : " "]);
             });
 
-            const questionsCSQVR = [
-                "CSQVR1", "CSQVR2", "CSQVR3", "CSQVR4", "CSQVR5", "CSQVR6"
-            ];
-
-            questionsCSQVR.forEach((question, index) => {
-                let selectedValue = document.querySelector(`input[name="csq${index + 31}"]:checked`);
-                data.push([question, selectedValue ? selectedValue.value : " "]);
-            });
     
             // Convert data to a worksheet
             let ws = XLSX.utils.aoa_to_sheet(data);
@@ -235,7 +229,7 @@
             XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
     
             // Save as Excel file
-            let fileName = `Survey_${conditionId}_${participantId}.xlsx`;
+            let fileName = `ar_${conditionId}_${participantId}.xlsx`;
             XLSX.writeFile(wb, fileName);
     
             alert("Data saved successfully as " + fileName);
