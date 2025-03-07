@@ -216,7 +216,7 @@ function saveExcel() {
                 XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
 
                 // Save as Excel file
-                let fileName = `Survey_${participantId}.xlsx`;
+                let fileName = `Demo_Ati_${participantId}.xlsx`;
                 XLSX.writeFile(wb, fileName);
                 alert("Data saved successfully as " + fileName);
     }

@@ -29,11 +29,11 @@
     <div class="container">
         <a href="experiment.html" class="back-arrow">← Back to Home</a>
         
-        <p>Please enter your participant ID and condition ID before submitting.</p>
 
         <!-- Input fields for participant ID and condition -->
         <input type="text" id="participantId" class="input-field" placeholder="Participant ID" required>
         <input type="text" id="conditionId" class="input-field" placeholder="Condition ID" required>
+        <p>Please respond to the following items based on your training experience. Some items are statements, while others are questions. There are no right or wrong answers—simply select the response that best reflects your personal experience. Try to answer as spontaneously as possible without overanalyzing each item. The same set of items may be presented for different training conditions.</p>
 
         <form id="pbForm">
             <h2>Task Load Index - NASA-TLX</h2>
@@ -175,7 +175,7 @@
             XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
     
             // Save as Excel file
-            let fileName = `Survey_${conditionId}_${participantId}.xlsx`;
+            let fileName = `Cond_${conditionId}_${participantId}.xlsx`;
             XLSX.writeFile(wb, fileName);
     
             alert("Data saved successfully as " + fileName);
