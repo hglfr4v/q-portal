@@ -266,7 +266,7 @@
             ];
 
             questionsCSQVR.forEach((question, index) => {
-                let selectedValue = document.querySelector(`input[name="csq${index + 29}"]:checked`);
+                let selectedValue = document.querySelector(`input[name="q${index + 29}"]:checked`);
                 data.push([question, selectedValue ? selectedValue.value : " "]);
             });
     
