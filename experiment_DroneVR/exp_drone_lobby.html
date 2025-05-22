@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Questionnaires Home</title>
+    <title>JEXP Questionnaires Home</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
         .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+        .back-arrow { text-decoration: none; font-size: 18px; font-weight: bold; display: block; margin-bottom: 20px; color: #007bff; text-align: left; }
+        .back-arrow:hover { color: #0056b3; }
         h1 { margin-bottom: 20px; }
         .link-btn { display: block; margin: 10px 0; padding: 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 18px; }
         .link-btn:hover { background-color: #0056b3; }
@@ -15,16 +17,11 @@
 <body>
 
     <div class="container">
-        <h1>Welcome to the Questionnaire Portal</h1>
-        <p>Select a questionnaire to complete:</p>
-        <a href="questionnaires/allquestionnaire.html" class="link-btn">All Questionnaires</a>
-        <a href="experiment_AirForce/experiment.html" class="link-btn"> AF Experiment</a>
-        <a href="experiment_AvatarProximity/qomexexp.html" class="link-btn">Avatar Proximity Experiment</a>
-        <a href="experiment_N-BackTask/exp_nbt_lobby.html" class="link-btn">N Back Task Experiment</a>
-         <a href="experiment_DroneVR/exp_drone_lobby.html" class="link-btn">Drone VR Experiment</a>
-        <!-- TO-DO SAM
-        <a href="sam.html" class="link-btn">Self-Assessment Manikin (SAM)</a>
-        -->
+        <a href="../index.html" class="back-arrow">← Back to Home</a>
+        <p>Select a condition:</p>
+        <a href="exp_drone_pre.html" class="link-btn">Before Experiment Questionnaire</a>
+        <a href="exp_drone_parcourtask.html" class="link-btn">After Condition Questionnaire</a>
+        <a href="exp_drone_after.html" class="link-btn">After Experiment Questionnaire</a>
     </div> 
 
 </body>
