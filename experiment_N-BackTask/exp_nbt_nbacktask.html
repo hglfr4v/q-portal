@@ -223,7 +223,7 @@
             XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
     
             // Save as Excel file
-            let fileName = `vr_${conditionId}_${participantId}.xlsx`;
+            let fileName = `condition${conditionId}_user${participantId}.xlsx`;
             XLSX.writeFile(wb, fileName);
     
             alert("Data saved successfully as " + fileName);
