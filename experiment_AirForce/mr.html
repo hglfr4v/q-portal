@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <title>VR Condition</title>
+    <title>MR Condition</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
         .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
@@ -27,7 +27,7 @@
 <body>
 
     <div class="container">
-        <a href="experiment.html" class="back-arrow">← Back to Home</a>
+        <a href="experiment_AirForce/experiment.html" class="back-arrow">← Back to Home</a>
         
 
         <!-- Input fields for participant ID and condition -->
@@ -222,9 +222,8 @@
                 alert("Please enter both Participant ID and Condition ID.");
                 return;
             }
-            
             let isValid = true;
-            let errors = [];
+        let errors = [];
       
     const itemsNASA = 6; // Number of ATI questions
     for (let i = 1; i <= itemsNASA; i++) {

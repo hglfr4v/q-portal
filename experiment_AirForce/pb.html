@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <title>CO Condition</title>
+    <title>PB Condition</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
         .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
@@ -27,7 +27,7 @@
 <body>
 
     <div class="container">
-        <a href="experiment.html" class="back-arrow">← Back to Home</a>
+        <a href="experiment_AirForce/experiment.html" class="back-arrow">← Back to Home</a>
         
 
         <!-- Input fields for participant ID and condition -->
@@ -99,71 +99,6 @@
                     </div>
                 `).join(""));
                  </script> 
-                  <hr>
-                 <h2>System Usability Scale - SUS</h2>
-
-<script>
-    const questionsSUS = [
-        "I think that I would like to use this system frequently.",
-        "I found the system unnecessarily complex.",
-        "I thought the system was easy to use.",
-        "I think that I would need the support of a technical person to use this system.",
-        "I found the various functions in this system were well integrated.",
-        "I thought there was too much inconsistency in this system.",
-        "I would imagine that most people would learn to use this system very quickly.",
-        "I found the system very cumbersome to use.",
-        "I felt very confident using the system.",
-        "I needed to learn a lot of things before I could get going with this system."
-    ];
-
-    const scaleLabels = ["Strongly Disagree", "Strongly Agree"];
-
-    document.write(questionsSUS.map((q, index) => `
-        <div class="question-container">
-            <p>${q}</p>
-            <div class="radio-group">
-                <div class="scale-labels"><span>${scaleLabels[0]}</span><span>${scaleLabels[1]}</span></div>
-                <table class="radio-table">
-                    <tr>
-                        ${Array.from({ length: 5 }, (_, i) => `
-                            <td><input type="radio" name="q${index + 15}" value="${i + 1}" required></td>
-                        `).join("")}
-                    </tr>
-                </table>
-            </div>
-        </div>
-    `).join(""));
-</script>
-
-<hr>
-<h2>CyberSickness in Virtual Reality Questionnaire CSQ-VR</h2>
-<script>
-    const questionsCSQVR = [
-        ["Nausea A: Do you experience nausea (e.g., stomach pain, acid reflux, or tension to vomit)?", "Absent Feeling", "Extreme Feeling"],
-        ["Nausea B: Do you experience dizziness (e.g., light-headedness or spinning feeling)?", "Absent Feeling", "Extreme Feeling"],
-        ["Vestibular A: Do you experience disorientation (e.g., spatial confusion or vertigo)?", "Absent Feeling", "Extreme Feeling"],
-        ["Vestibular B: Do you experience postural instability (i.e., imbalance)?", "Absent Feeling", "Extreme Feeling"],
-        ["Oculomotor A: Do you experience a visually induced fatigue (e.g., feeling of tiredness or sleepiness)?", "Absent Feeling", "Extreme Feeling"],
-        ["Oculomotor B: Do you experience a visually induced discomfort (e.g., eyestrain, blurred vision, or headache)?", "Absent Feeling", "Extreme Feeling"]
-    ];
-
-    document.write(questionsCSQVR.map((q, index) => `
-        <div class="question-container">
-            <p><strong>${q[0]}</strong></p>
-            <div class="radio-group">
-                <div class="scale-labels"><span>${q[1]}</span><span>${q[2]}</span></div>
-                <table class="radio-table">
-                    <tr>
-                        ${Array.from({ length: 7 }, (_, i) => `
-                            <td><input type="radio" name="q${index + 25}" value="${i + 1}" required></td>
-                        `).join("")}
-                    </tr>
-                </table>
-            </div>
-        </div>
-    `).join(""));
-
-</script>
 
                
            
@@ -206,23 +141,6 @@
         }
     }
     
-    const itemsSUS = 10;
-    for (let i = 15; i <= itemsNASA+itemsUEQS+itemsSUS; i++) {
-        let checked = document.querySelector(`input[name="q${i}"]:checked`);
-        if (!checked) {
-            isValid = false;
-            errors.push(`Please answer question ${i-14} in the SUS.`);
-        }
-    }
-   
-    const itemsCSQ = 6; // Number of ATI questions
-    for (let i = 25; i <= itemsNASA+itemsUEQS+itemsSUS+itemsCSQ; i++) {
-        let checked = document.querySelector(`input[name="q${i}"]:checked`);
-        if (!checked) {
-            isValid = false;
-            errors.push(`Please answer question ${i-24} in the CSQ.`);
-        }
-    }
 
     if (!isValid) {
         alert(errors.join("\n"));
@@ -248,24 +166,6 @@
     
             questionsUEQ_S.forEach((question, index) => {
                 let selectedValue = document.querySelector(`input[name="q${index + 7}"]:checked`);
-                data.push([question, selectedValue ? selectedValue.value : " "]);
-            });
-
-            const questionsSUS = [
-                "SUS1", "SUS2", "SUS3", "SUS4", "SUS5", "SUS6", "SUS7", "SUS8", "SUS9", "SUS10"
-            ];
-    
-            questionsSUS.forEach((question, index) => {
-                let selectedValue = document.querySelector(`input[name="q${index + 15}"]:checked`);
-                data.push([question, selectedValue ? selectedValue.value : " "]);
-            });
-
-            const questionsCSQVR = [
-                "CSQVR1", "CSQVR2", "CSQVR3", "CSQVR4", "CSQVR5", "CSQVR6"
-            ];
-
-            questionsCSQVR.forEach((question, index) => {
-                let selectedValue = document.querySelector(`input[name="q${index + 25}"]:checked`);
                 data.push([question, selectedValue ? selectedValue.value : " "]);
             });
     
