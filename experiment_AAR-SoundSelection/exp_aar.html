@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sound Selection Survey</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-arrow {
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 20px;
+            color: #007bff;
+            text-align: left;
+        }
+
+        .back-arrow:hover {
+            color: #0056b3;
+        }
+
+        .input-field {
+            margin: 10px 0;
+            padding: 10px;
+            width: 50%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .sections-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.section {
+    flex: 1 1 18%; /* Grows and shrinks but starts at ~18% width */
+    min-width: 220px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+        .section-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .audio-item {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        audio {
+            width: 100%;
+        }
+
+        #save-btn {
+            margin-top: 30px;
+            display: block;
+            font-size: 16px;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #save-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.03);
+        }
+
+        #save-btn:active {
+            background-color: #3e8e41;
+            transform: scale(0.97);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <a href="../index.html" class="back-arrow">← Back to Home</a>
+    <h1>Sound Category Preference Survey</h1>
+    <div style="margin: 10px 30px; text-align: left;">
+  <h2>Participant Information & Instructions</h2>
+  
+  <p><strong>Title:</strong><em>Sound Preference Study for Outdoor Navigation</em></p>
+
+  <p>This experiment is part of a research project aiming to explore which types of sounds are best suited for use in <strong>outdoor navigation systems</strong> (e.g., guiding users when walking through a city). In this first phase, we are investigating <strong>your preferences for different categories of sounds</strong> that could serve as navigation cues.</p>
+
+  <h4>🔊 What You Will Do</h4>
+  <p>You will be presented with <strong>five sound categories</strong>:</p>
+  <ul>
+    <li>Auditory icons: Real-world sounds with metaphorical or literal meaning (e.g., familiar everyday sounds).</li>
+    <li>Nature sounds: Environmental sounds conveying direction or movement (e.g., wind, birds).</li>
+    <li>Artificial sounds: Non-natural, tech or mechanical interface sounds (e.g., beeps, electronic tones).</li>
+    <li>Musical instrument sounds: Short, tonal musical notes that are non-verbal (e.g., piano notes).</li>
+    <li>Spearcons: Time-compressed speech commands (very short, compressed speech).</li>
+  </ul>
+  <p>For each category, you will hear <strong>three sound options</strong>. Your task is to <strong>listen to each sound carefully</strong> and select the one you would personally <strong>prefer to hear</strong> in an <em>outdoor navigation context</em>, such as receiving a cue to “turn left.”</p>
+
+  <p>There are no right or wrong answers — we are interested in your <strong>subjective preference</strong>. Please respond as naturally and honestly as possible.</p>
+
+  <h4>🕒 Duration</h4>
+  <p>The study will take approximately <strong>10–15 minutes</strong>.</p>
+
+  <h4>🔐 Your Data</h4>
+  <p>All responses are anonymous and will be used for research purposes only. The results will help us design future navigation systems that are more intuitive, accessible, and comfortable for users in outdoor environments.</p>
+
+  <h4>✅ Ready?</h4>
+  <p>When you're ready, please enter your <strong>Participant ID</strong> and begin the survey. Make sure you're in a quiet environment where you can hear the audio clearly.</p>
+
+  <p>Thank you for your participation!</p>
+</div>
+        <input type="text" id="participantId" class="input-field" placeholder="Participant ID" required>
+
+        <form id="audio-form">
+          <h3>🎯 Scenario 1: Turn Left at the Next Intersection</h3>
+            <div class="sections-wrapper">
+                
+                <!-- Repeat for all sections -->
+                <div class="section" id="section1">
+                    <div class="section-title">⚙️ Artificial Sounds</div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Artificial Sound" value="audio1-1" required><audio controls src="../assets/audio/artificial_sounds/Beep Sound Effect 43875.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Artificial Sound" value="audio1-2"><audio controls src="../assets/audio/artificial_sounds/UI Confirmation Blip Sound.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Artificial Sound" value="audio1-3"><audio controls src="../assets/audio/artificial_sounds/Sonar Sound Effect Jul 12.mp3"></audio></div>
+                </div>
+
+                <div class="section" id="section2">
+                    <div class="section-title">🌿 Nature Sounds</div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Nature Sounds" value="audio2-1" required><audio controls src="../assets/audio/nature_sounds/Leaf Rustling Sound.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Nature Sounds" value="audio2-2"><audio controls src="../assets/audio/nature_sounds/Wind Rustling Grass Sound.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Nature Sounds" value="audio2-3"><audio controls src="../assets/audio/nature_sounds/Wing Flapping Sound Effect.mp3"></audio></div>
+                </div>
+
+                <div class="section" id="section3">
+                    <div class="section-title">⏩ Spearcons</div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Spearcons" value="audio3-1" required><audio controls src="../assets/audio/spearcons/Left turn ahead_spearcon.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Spearcons" value="audio3-2"><audio controls src="../assets/audio/spearcons/turn left_spearcon.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Spearcons" value="audio3-3"><audio controls src="../assets/audio/spearcons/Go left_spearcon.mp3"></audio></div>
+                </div>
+
+                 <div class="section" id="section4">
+                    <div class="section-title">🎵 Musical Instruments</div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Musical Instruments" value="audio4-1"><audio controls src="../assets/audio/music_instruments/Harp Gliss Down Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Musical Instruments" value="audio4-2"><audio controls src="../assets/audio/music_instruments/Piano Slide Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Musical Instruments" value="audio4-3"><audio controls src="../assets/audio/music_instruments/Xylophone Eye Blinks Sound.mp3"></audio></div>               
+                  </div>
+
+                 <div class="section" id="section5">
+                    <div class="section-title">🔊 Auditory Icons</div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Auditory Icons" value="audio5-1"><audio controls src="../assets/audio/auditory_icons/Bicycle Wheel Turning by 13GPanska Jan.wav"></audio></div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Auditory Icons" value="audio5-2"><audio controls src="../assets/audio/auditory_icons/Car Indicator 2 by Day Garwood.flac"></audio></div>
+                    <div class="audio-item"><input type="radio" name="TurnLeft: Auditory Icons" value="audio5-3"><audio controls src="../assets/audio/auditory_icons/Left Gravel Footstep Sound.mp3"></audio></div>
+                </div>
+
+            </div>
+            <h3>🚧 Scenario 2: Obstacle Ahead – Change Direction</h3>
+            <div class="sections-wrapper">
+                
+                <!-- Repeat for all sections -->
+                <div class="section" id="section1">
+                    <div class="section-title">⚙️ Artificial Sounds</div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Artificial Sounds" value="audio1-1"><audio controls src="../assets/audio/artificial_sounds/Beep Sound Effect 43875.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Artificial Sounds" value="audio1-2"><audio controls src="../assets/audio/artificial_sounds/Digital Alarm Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Artificial Sounds" value="audio1-3"><audio controls src="../assets/audio/artificial_sounds/Beep Warning Sound (1).mp3"></audio></div>
+                </div>
+
+                <div class="section" id="section2">
+                    <div class="section-title">🌿 Nature Sounds</div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Nature Sounds" value="audio2-1"><audio controls src="../assets/audio/nature_sounds/Tree Branch Break Sound.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Nature Sounds" value="audio2-2"><audio controls src="../assets/audio/nature_sounds/Thunder Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Nature Sounds" value="audio2-3"><audio controls src="../assets/audio/nature_sounds/Red-tailed Hawk Flying Away Sound.mp3"></audio></div>
+                </div>
+
+                <div class="section" id="section3">
+                    <div class="section-title">⏩ Spearcons</div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Spearcons" value="audio3-1"><audio controls src="../assets/audio/spearcons/Danger - Stop_spearcon.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Spearcons" value="audio3-2"><audio controls src="../assets/audio/spearcons/Stop immediately_spearcon.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Spearcons" value="audio3-3"><audio controls src="../assets/audio/spearcons/Obstacle ahead_spearcon.mp3"></audio></div>
+                </div>
+
+                 <div class="section" id="section4">
+                    <div class="section-title">🎵 Musical Instruments</div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Musical Instruments" value="audio4-1"><audio controls src="../assets/audio/music_instruments/Cymbal Crash Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Musical Instruments" value="audio4-2"><audio controls src="../assets/audio/music_instruments/Drum Roll Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Musical Instruments" value="audio4-3"><audio controls src="../assets/audio/music_instruments/Piano Warning Sound Effect.mp3"></audio></div>
+                </div>
+
+                 <div class="section" id="section5">
+                    <div class="section-title">🔊 Auditory Icons</div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Auditory Icons" value="audio5-1"><audio controls src="../assets/audio/auditory_icons/Glass Shatter Sound 7.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Auditory Icons" value="audio5-2"><audio controls src="../assets/audio/auditory_icons/Door Slam Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Obstacle: Auditory Icons" value="audio5-3"><audio controls src="../assets/audio/auditory_icons/Car and Bike Brake Sound.mp3"></audio></div>
+                </div>
+
+            </div>
+             <h3>🧭 Scenario 3: Continue straight for 100 meters</h3>
+            <div class="sections-wrapper">
+               
+                <!-- Repeat for all sections -->
+                <div class="section" id="section1">
+                    <div class="section-title">⚙️ Artificial Sounds</div>
+                    <div class="audio-item"><input type="radio" name="Continue: Artificial Sounds" value="audio1-1"><audio controls src="../assets/audio/artificial_sounds/Heartbeat Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Continue: Artificial Sounds" value="audio1-2"><audio controls src="../assets/audio/artificial_sounds/Ascending Sweep Tone 02.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Continue: Artificial Sounds" value="audio1-3"><audio controls src="../assets/audio/artificial_sounds/Neutral Notification Sound.mp3"></audio></div>
+                </div>
+
+                <div class="section" id="section2">
+                    <div class="section-title">🌿 Nature Sounds</div>
+                    <div class="audio-item"><input type="radio" name="Continue: Nature Sounds" value="audio2-1"><audio controls src="../assets/audio/nature_sounds/Waterfall Sound Effect 157551.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Continue: Nature Sounds" value="audio2-2"><audio controls src="../assets/audio/nature_sounds/Wind Tunnel Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Continue: Nature Sounds" value="audio2-3"><audio controls src="../assets/audio/nature_sounds/River Sound Effect 28466.mp3"></audio></div>
+                </div>
+
+                <div class="section" id="section3">
+                    <div class="section-title">⏩ Spearcons</div>
+                    <div class="audio-item"><input type="radio" name="Continue: Spearcons" value="audio3-1"><audio controls src="../assets/audio/spearcons/Keep going_spearcon.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Continue: Spearcons" value="audio3-2"><audio controls src="../assets/audio/spearcons/Go forward_spearcon.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Continue: Spearcons" value="audio3-3"><audio controls src="../assets/audio/spearcons/Continue ahead_spearcon.mp3"></audio></div>
+                </div>
+
+                 <div class="section" id="section4">
+                    <div class="section-title">🎵 Musical Instruments</div>
+                    <div class="audio-item"><input type="radio" name="Continue: Musical Instruments" value="audio4-1"><audio controls src="../assets/audio/music_instruments/Ascending Harp Sound.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Continue: Musical Instruments" value="audio4-2"><audio controls src="../assets/audio/music_instruments/Simple Piano Reverse Logo.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Continue: Musical Instruments" value="audio4-3"><audio controls src="../assets/audio/music_instruments/Marimba Roll Sound Effect.mp3"></audio></div>
+                </div>
+
+                 <div class="section" id="section5">
+                    <div class="section-title">🔊 Auditory Icons</div>
+                    <div class="audio-item"><input type="radio" name="Continue: Auditory Icons" value="audio5-1"><audio controls src="../assets/audio/auditory_icons/Steady Footstep Loop.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Continue: Auditory Icons" value="audio5-2"><audio controls src="../assets/audio/auditory_icons/Trolley Wheel Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Continue: Auditory Icons" value="audio5-3"><audio controls src="../assets/audio/auditory_icons/Subway Rail Sound Effect.mp3"></audio></div>
+                </div>
+
+                <!-- Repeat similarly for section3, section4, section5 -->
+                <!-- ... -->
+            </div>
+            <h3>🏁 Scenario 4: You Have Reached Your Destination</h3>
+             <div class="sections-wrapper">
+               
+                <!-- Repeat for all sections -->
+                <div class="section" id="section1">
+                    <div class="section-title">⚙️ Artificial Sounds</div>
+                    <div class="audio-item"><input type="radio" name="Destination: Artificial Sounds" value="audio1-1"><audio controls src="../assets/audio/artificial_sounds/Soft Bell Sound Effect (1).mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Destination: Artificial Sounds" value="audio1-2"><audio controls src="../assets/audio/artificial_sounds/Wind Up Tone Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Destination: Artificial Sounds" value="audio1-3"><audio controls src="../assets/audio/artificial_sounds/Subway Station Chime.mp3"></audio></div>
+                </div>
+
+                <div class="section" id="section2">
+                    <div class="section-title">🌿 Nature Sounds</div>
+                    <div class="audio-item"><input type="radio" name="Destination: Nature Sounds" value="audio2-1"><audio controls src="../assets/audio/nature_sounds/Leaf Rustling Sound.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Destination: Nature Sounds" value="audio2-2"><audio controls src="../assets/audio/nature_sounds/Cricket Sound Summer Night.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Destination: Nature Sounds" value="audio2-3"><audio controls src="../assets/audio/nature_sounds/Birds Taking Off Sound.mp3"></audio></div>
+                </div>
+
+                <div class="section" id="section3">
+                    <div class="section-title">⏩ Spearcons</div>
+                    <div class="audio-item"><input type="radio" name="Destination: Spearcons" value="audio3-1"><audio controls src="../assets/audio/spearcons/You have arrived_spearcon.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Destination: Spearcons" value="audio3-2"><audio controls src="../assets/audio/spearcons/Destination reached_spearcon.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Destination: Spearcons" value="audio3-3"><audio controls src="../assets/audio/spearcons/You can stop now_spearcon.mp3"></audio></div>
+                </div>
+
+                 <div class="section" id="section4">
+                    <div class="section-title">🎵 Musical Instruments</div>
+                    <div class="audio-item"><input type="radio" name="Destination: Musical Instruments" value="audio4-1"><audio controls src="../assets/audio/music_instruments/Harp Glissando Down (1).mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Destination: Musical Instruments" value="audio4-2"><audio controls src="../assets/audio/music_instruments/Piano Ending Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Destination: Musical Instruments" value="audio4-3"><audio controls src="../assets/audio/music_instruments/Soft Bell Sound Effect.mp3"></audio></div>
+                </div>
+
+                 <div class="section" id="section5">
+                    <div class="section-title">🔊 Auditory Icons</div>
+                    <div class="audio-item"><input type="radio" name="Destination: Auditory Icons" value="audio5-1"><audio controls src="../assets/audio/auditory_icons/Bike Brake Stop Sound.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Destination: Auditory Icons" value="audio5-2"><audio controls src="../assets/audio/auditory_icons/Door Open Sound Effect.mp3"></audio></div>
+                    <div class="audio-item"><input type="radio" name="Destination: Auditory Icons" value="audio5-3"><audio controls src="../assets/audio/auditory_icons/Elevator Ding Sound Effect.mp3"></audio></div>
+                </div>
+
+                <!-- Repeat similarly for section3, section4, section5 -->
+                <!-- ... -->
+            </div>
+
+            <button type="button" id="save-btn" onclick="saveResults()">💾 Save Answers</button>
+        </form>
+    </div>
+
+  <script>
+  function saveResults() {
+    const participantId = document.getElementById('participantId').value.trim();
+    const form = document.getElementById('audio-form');
+    const data = new FormData(form);
+
+    if (!participantId) {
+      alert("Please enter both Participant ID.");
+      return;
+    }
+
+    // Collect all selections
+    const selections = {
+      ParticipantID: participantId
+    };
+
+    for (let [key, value] of data.entries()) {
+      selections[key] = value;
+    }
+
+    // Convert to CSV
+    const headers = Object.keys(selections).join(",");
+    const values = Object.values(selections).join(",");
+    const csvContent = headers + "\n" + values;
+
+    // Trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `audio_selection_${participantId}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    console.log("CSV saved:", csvContent);
+  }
+</script>
+</body>
+</html>
