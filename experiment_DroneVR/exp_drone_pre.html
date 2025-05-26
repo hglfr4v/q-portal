@@ -150,6 +150,56 @@
     </div>
 </div>
 
+  <div class="question-container">
+    <strong>8. Do you play video games, or have you played video games in the past?</strong>
+    <div class="radio-group">
+        <label><input type="radio" name="Prev_exp_videogame" value="Yes" required> Yes</label>
+        <label><input type="radio" name="Prev_exp_videogame" value="No"> No</label>
+    </div>
+</div>
+
+
+<div class="question-container">
+    <strong>9.If yes, which type of video games do you play? (Multiple Choice)</strong>
+    <div class="radio-group">
+        <label><input type="checkbox" name="Prev_videogame" value="first-person"> Video Games in First Person View (for example DOOM, Counter-Strike, Call of Duty)</label>
+        <label><input type="checkbox" name="Prev_videogame" value="virtual-reality"> Virtual Reality Video Games</label>
+        <label><input type="checkbox" name="Prev_videogame" value="third-person"> Video Games in First Person View (for example DOOM, Counter-Strike, Call of Duty)</label>
+        <label><input type="checkbox" name="Prev_videogame" value="isometric"> Virtual Reality Video Games</label>
+        <label><input type="checkbox" name="Prev_videogame" value="side-scrolling"> Video Games in First Person View (for example DOOM, Counter-Strike, Call of Duty)</label>
+        <label><input type="checkbox" name="Prev_videogame" value="static"> Virtual Reality Video Games</label>
+        <label><input type="checkbox" name="Prev_videogame" value="other"> Other</label>
+    </div>
+</div>
+ <div class="question-container">
+                        <strong>10. Have you controlled a Quadcopter/Drone before?</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="experienceDrone" value="Yes" required> Yes</label>
+                            <label><input type="radio" name="experienceDrone" value="No"> No </label>                        
+                        </div>
+                    </div>
+
+                  <div class="question-container">
+                        <strong>11. If yes, how many hours of experience do you have?</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="hoursDrone" value="Less than 1 hour"> Less than 1 hour </label>
+                            <label><input type="radio" name="hoursDrone" value="1 to 3 hours"> 1 to 3 hours </label>
+                            <label><input type="radio" name="hoursDrone" value="3 to 5 hours"> 3 to 5 hours </label>
+                            <label><input type="radio" name="hoursDrone" value="5 to 10 hours"> 5 to 10 hours </label>
+                            <label><input type="radio" name="hoursDrone" value="More than 10 hours"> More than 10 hours </label>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <strong>12. Do you have impaired vision or hearing and do not use vision or hearing correction?</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="limitation" value="no restriction" required> I am not restricted in my vision or hearing during the experiment. </label>
+                            <label><input type="radio" name="limitation" value="limited vision"> I am limited in my vision during the experiment. </label>
+                            <label><input type="radio" name="limitation" value="limited hearing"> I am limited in my hearing during the experiment. </label>
+                            <label><input type="radio" name="limitation" value="both limited"> I am limited in both my vision and my hearing during the experiment.</label>
+                        </div>
+                    </div>
+
                    
                     <hr>
              <h2>Affinity for Technology Interaction Scale - ATI</h2>
@@ -217,6 +267,10 @@ function saveExcel() {
         { name: "hoursXR", label: "Hours spent with XR" },
         { name: "competenceXR", label: "Competence with XR" },
         { name: "confidenceXR", label: "Confidence with XR" },
+        { name: "Prev_exp_videogame", label: "Previous Experience with Videogames" },
+        { name: "experienceDrone", label: "Previous Experience with drones" },
+        { name: "hoursDrone", label: "hours spent driving with XR" },
+        { name: "limitation", label: "Hearing or Sight limitations" },
     ];
 
     radioGroups.forEach(group => {
@@ -238,6 +292,10 @@ if (!isCheckboxGroupValid("contextIM")) {
 if (!isCheckboxGroupValid("typeIM")) {
     isValid = false;
     errors.push("Please select at least one option for: Types of immersive applications");
+}
+if (!isCheckboxGroupValid("Prev_videogame")) {
+    isValid = false;
+    errors.push("Please select at least one option for: previous experience with videogames");
 }
     const itemsATI = 9; // Number of ATI questions
     for (let i = 1; i <= itemsATI; i++) {
@@ -276,6 +334,11 @@ function collectDemographicData(data) {
     let typeIM = getCheckedValues("typeIM");
     let confidenceXR = document.querySelector('input[name="confidenceXR"]:checked');
     let competenceXR = document.querySelector('input[name="competenceXR"]:checked');
+    let prevExpVideogame = document.querySelector(`input[name="Prev_exp_videogame"]:checked`);
+    let prevVideogame = getCheckedValues("Prev_videogame");
+    let experienceDrone = document.querySelector('input[name="experienceDrone"]:checked');
+    let hoursDrone = document.querySelector('input[name="hoursDrone"]:checked');
+    let limitation = document.querySelector('input[name="limitation"]:checked');
 
     data.push(["Participant ID", participantId || "Not Provided"]);
     data.push(["Age", age || "Not Provided"]);
@@ -287,7 +350,14 @@ function collectDemographicData(data) {
     data.push(["Type of IM", typeIM || "Not Provided"]);
     data.push(["Confidence using immersive media", confidenceXR ? confidenceXR.value : "No Answer"]);
     data.push(["Competence with immersive media", competenceXR ? competenceXR.value : "No Answer"]);
+    data.push(["Previous experience with  videogames", prevExpVideogame ? prevExpVideogame.value : "No Answer"]);
+    data.push(["Type of Videogame", prevVideogame || "Not Provided"]);
+    data.push(["Previous experience with drone flight", experienceDrone ? experienceDrone.value : "No Answer"]);
+    data.push(["Previous hours", hoursDrone ? hoursDrone.value : "No Answer"]);
+    data.push(["Limitation", limitation ? limitation.value : "No Answer"]);
+
 }
+
 
                 collectDemographicData(data);
 

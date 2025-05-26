@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>Demographics </title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+        .back-arrow { text-decoration: none; font-size: 18px; font-weight: bold; display: block; margin-bottom: 20px; color: #007bff; text-align: left; }
+        .back-arrow:hover { color: #0056b3; }
+        .question-container { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px; text-align: left; }
+        .question-container p { font-size: 20px; font-weight: bold; } /* Increased font size */
+        .radio-group { display: flex; flex-direction: column; align-items: flex-start; }
+        .radio-group label { display: flex; display: flex;  align-items: center; gap: 10px; cursor: pointer; width: 100%;}
+        .radio-group input[type="radio"] { margin: 0; }
+        .radio-table { width: 100%; border-collapse: collapse; border-radius: 3x; overflow: hidden; text-align: center; }
+        .radio-table td { padding: 10px; border: 1px solid #ccc; }
+        .radio-table input { transform: scale(1.5); } /* Larger radio buttons */
+        .scale-labels { display: flex; justify-content: space-between; width: 100%; font-weight: bold; }
+        .submit-container { text-align: center; margin-top: 20px; } /* Centering the button */
+        .submit-btn { display: inline-block; width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .submit-btn:hover { background-color: #0056b3; }
+        .input-field { margin: 10px 0; padding: 10px; width: 90%; border: 1px solid #ccc; border-radius: 5px; }
+       /* .input-field { width: 100%; padding: 5px; margin-top: 5px; }*/
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <a href="exp_drone_lobby.html" class="back-arrow">← Back to Home</a>
+        <h2>Final Questionnaire</h2>
+        <p>Please enter your information.</p>
+
+        <form id="demographicsForm">
+                    <div class="question-container">
+                        <label for="participantId"><strong>Participant ID:</strong></label>
+                        <input type="text" id="participantId" name="participantId" class="input-field" placeholder="Participant ID eingeben">
+                    </div>
+            
+            
+                    <div class="question-container">
+                        <strong>1. Which perspective did you like most for controlling the drone?</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="favorite" value="Default POV"> Default View</label>
+                            <label><input type="radio" name="favorite" value="First POV"> First Person View</label>
+                            <label><input type="radio" name="favorite" value="Third POV"> Third Person View</label>
+                            <label><input type="radio" name="favorite" value="Chase POV"> Chase View</label>
+                        </div>
+                    </div>
+            
+                    <div class="question-container">
+                        <label for="comment"><strong>2. Why</strong></label>
+                        <input type="text" id="fav-comment" name="fav-comment" class="input-field" placeholder="Write here any further comment">
+                    </div>
+
+                      <div class="question-container">
+                        <strong>3. Which perspective did you like least for controlling the drone?</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="worst" value="Default POV"> Default View</label>
+                            <label><input type="radio" name="worst" value="First POV"> First Person View</label>
+                            <label><input type="radio" name="worst" value="Third POV"> Third Person View</label>
+                            <label><input type="radio" name="worst" value="Chase POV"> Chase View</label>
+                        </div>
+                    </div>
+            
+                    <div class="question-container">
+                        <label for="comment"><strong>4. Why</strong></label>
+                        <input type="text" id="worst-comment" name="worst-comment" class="input-field" placeholder="Write here any further comment">
+                    </div>
+            
+                    
+
+
+            <div class="submit-container">
+                <button type="submit" class="submit-btn" onclick="saveExcel()">Submit</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+function saveExcel() {
+        event.preventDefault(); // Prevent default form submission
+        // Ensure participant ID is not empty
+        let participantId = document.getElementById("participantId").value.trim();
+        if (!participantId) {
+        participantId = "Unknown_Participant"; // Default filename if no ID is entered
+        }
+        let data = [];
+        function collectDemographicData(data) {
+                    let participantId = document.getElementById("participantId").value.trim();
+                    let favoriteCond = document.querySelector(`input[name="favorite"]:checked`);                   
+                    let worstComment = document.getElementById("fav-comment").value.trim();
+                    let worstCond = document.querySelector(`input[name="worst"]:checked`);
+                    let favComment = document.getElementById("worst-comment").value.trim();
+                    data.push(["Participant ID", participantId || "Not Provided"]);
+                    data.push(["Fav comment", favComment || "Not Provided"]);
+                    data.push(["Condition Preference", favoriteCond ? favoriteCond.value : "Not Provided"]); 
+                    data.push(["Worst comment", worstComment || "Not Provided"]);
+                    data.push(["Condition Preference", worstCond ? worstCond.value : "Not Provided"]);
+        
+                    // Convert data to a worksheet
+        
+                }
+
+                collectDemographicData(data);
+                let ws = XLSX.utils.aoa_to_sheet(data);
+                let wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
+
+                // Save as Excel file
+                let fileName = `Final_${participantId}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                alert("Data saved successfully as " + fileName);
+    }
+    </script>   
+</body>
+</html>
