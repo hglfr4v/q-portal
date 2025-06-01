@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>Post questionnaire </title>
+     <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    .back-arrow {
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 20px;
+      color: #007bff;
+      text-align: left;
+    }
+    .back-arrow:hover {
+      color: #0056b3;
+    }
+    .question-container {
+      margin-bottom: 30px;
+    }
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .radio-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    .radio-table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    .radio-table input[type="radio"] {
+      transform: scale(1.5);
+      cursor: pointer;
+    }
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-weight: bold;
+    }
+    .submit-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .submit-btn {
+      display: inline-block;
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .submit-btn:hover {
+      background-color: #0056b3;
+    }
+    .input-field {
+      margin: 10px 0;
+      padding: 10px;
+      width: 50%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <a href="exp_arnavigation.html" class="back-arrow">← Back to Home</a>
+        <h2>Final Questionnaire</h2>
+        <p>Please answer the following questions.</p>
+
+        <form id="demographicsForm">
+                    <div class="question-container">
+                        <label for="participantId"><strong>Participant ID:</strong></label>
+                        <input type="text" id="participantId" name="participantId" class="input-field" placeholder="Participant ID eingeben">
+                    </div>
+             <script>
+        const audioQuestions = [
+          "I had a positive overall navigation experience with the audio cues.",
+          "I was able to clearly perceive the direction of the audio cues.",
+          "I understood the meaning of the audio cues.",
+          "The audio cues helped me navigate effectively.",
+          "I found the audio cues pleasant to use."
+        ];
+
+        document.write(
+          audioQuestions.map((question, index) => `
+            <div class="question-container">
+              <div class="radio-group">
+                <div class="scale-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <p>${question}</p>
+                <table class="radio-table">
+                  <tr>
+                    ${[1,2,3,4,5,6,7].map(value => `
+                      <td><input type="radio" name="aq${index + 1}" value="${value}" required></td>
+                    `).join("")}
+                  </tr>
+                </table>
+              </div>
+            </div>
+          `).join("")
+        );
+      </script>
+            
+                    <div class="question-container">
+                        <label for="like"><strong>What did you like about this type of audio cues?</strong></label>
+                        <input type="text" id="like" name="like" class="input-field" placeholder="">
+                    </div>
+
+                    <div class="question-container">
+                        <label for="dislike"><strong>What did you not like about this type of audio cues?</strong></label>
+                        <input type="text" id="dislike" name="dislike" class="input-field" placeholder="">
+                    </div>
+
+                    <div class="question-container">
+                        <label for="improvement"><strong>How could this type of audio cues be improved for more efficient or pleasant navigation?</strong></label>
+                        <input type="text" id="improvement" name="improvement" class="input-field" placeholder="">
+                    </div>
+
+                  
+
+            
+                    
+
+
+            <div class="submit-container">
+                <button type="submit" class="submit-btn" onclick="saveExcel()">Submit</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+function saveExcel() {
+      
+        event.preventDefault(); // Prevent default form submission
+        // Ensure participant ID is not empty
+        let participantId = document.getElementById("participantId").value.trim();
+        if (!participantId) {
+        participantId = "Unknown_Participant"; // Default filename if no ID is entered
+        }
+        let data = [];
+        function collectDemographicData(data) {
+                    let participantId = document.getElementById("participantId").value.trim();
+                   for (let i = 1; i <= 5; i++) {
+        const selected = document.querySelector(`input[name="aq${i}"]:checked`);
+        data.push([`AudioQ${i}`, selected ? selected.value : ""]);
+      }
+                    let like = document.getElementById("like").value.trim();
+                    let dislike = document.getElementById("dislike").value.trim();
+                    let improvement = document.getElementById("improvement").value.trim();
+                    let condition = document.querySelector(`input[name="condition"]:checked`);
+                    data.push(["Participant ID", participantId || "Not Provided"]);
+                    data.push(["Like", like || "Not Provided"]);
+                    data.push(["Dislike", dislike || "Not Provided"]);
+                    data.push(["Suggestions", improvement || "Not Provided"]);
+        
+                    // Convert data to a worksheet
+        
+                }
+
+                collectDemographicData(data);
+                let ws = XLSX.utils.aoa_to_sheet(data);
+                let wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
+
+                // Save as Excel file
+                let fileName = `Final_${participantId}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                alert("Data saved successfully as " + fileName);
+    }
+    </script>   
+</body>
+</html>
+
+
+
+  <script>
+    function saveAudioExcel() {
+      event.preventDefault();
+
+      const participantId = document.getElementById("participantId").value.trim();
+      const conditionId = document.getElementById("conditionId").value.trim();
+
+      if (!participantId || !conditionId) {
+        alert("Please enter both Participant ID and Condition ID.");
+        return;
+      }
+
+      const data = [["PID", participantId], ["CID", conditionId]];
+      for (let i = 1; i <= 5; i++) {
+        const selected = document.querySelector(`input[name="aq${i}"]:checked`);
+        data.push([`AudioQ${i}`, selected ? selected.value : ""]);
+      }
+
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Audio_Results");
+
+      const fileName = `AudioSurvey_${conditionId}_${participantId}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+
+      alert("Audio survey data saved as " + fileName);
+    }
+  </script>
+</body>
+</html>
