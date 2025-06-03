@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <title>UEQ - Complete</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
@@ -19,20 +20,31 @@
         .submit-container { text-align: center; margin-top: 20px; } /* Centering the button */
         .submit-btn { display: inline-block; width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
         .submit-btn:hover { background-color: #0056b3; }
-        .input-field { margin: 10px 0; padding: 10px; width: 50%; border: 1px solid #ccc; border-radius: 5px; }
+       .input-field { margin: 10px 0; padding: 10px; width: 80%; /* Wider input fields */ border: 1px solid #ccc; border-radius: 5px; font-size: 16px; /* Make text larger and easier to read */ box-sizing: border-box; }
+        textarea.input-field { height: 80px; /* More space for writing */ resize: vertical; }
+        .description{text-align: justify;}
     </style>
 </head>
 <body>
 
     <div class="container">
         <a href="exp_arnavigation.html" class="back-arrow">← Back to Home</a>
-        <h1>User Experience Questionnaire - UEQ </h1>
+        
         <p>Please enter your participant ID and condition ID before submitting.</p>
 
         <!-- Input fields for participant ID and condition -->
         <input type="text" id="participantId" class="input-field" placeholder="Participant ID" required>
         <input type="text" id="conditionId" class="input-field" placeholder="Condition ID" required>
+        <h1>User Experience Questionnaire - UEQ </h1>
+<p class="description">The questionnaire consists of pairs of contrasting attributes that may apply to the product/expereince.
+The circles between the attributes represent gradations between the opposites. 
+You can express your agreement with the attributes by ticking the circle that most closely reflects your impression. 
+Please decide spontaneously. 
+Don’t think too long about your decision to make sure that you convey your original impression. 
+Sometimes you may not be completely sure about your agreement with a particular attribute or you may find that the attribute does not apply completely to the particular product/experience. 
+Nevertheless, please tick a circle in every line.
 
+It is your personal opinion that counts. Please remember: there is no wrong or right answer!</p>
         <form id="ueqForm">
 
             <!-- Loop through all 26 questions -->
@@ -85,55 +97,107 @@
                 </div>
             `).join(""));
             </script>
+<h2>Custom Questionnaire</h2>
+        <p class="description">
+  This short custom questionnaire evaluates your experience with the audio cues used for navigation. It includes both scaled responses and open-ended questions to better understand what aspects were effective, unclear, or could be improved.
+</p>
+              <script>
+        const audioQuestions = [
+          "1. I had a positive overall navigation experience with the audio cues.",
+          "2. I was able to clearly perceive the direction of the audio cues.",
+          "3. I understood the meaning of the audio cues.",
+          "4. The audio cues helped me navigate effectively.",
+          "5. I found the audio cues pleasant to use."
+        ];
+
+        document.write(
+          audioQuestions.map((question, index) => `
+            <div class="question-container">
+                <p>${question}</p>
+              <div class="radio-group">
+                <div class="scale-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                
+                <table class="radio-table">
+                  <tr>
+                    ${[1,2,3,4,5,6,7].map(value => `
+                      <td><input type="radio" name="aq${index + 1}" value="${value}" required></td>
+                    `).join("")}
+                  </tr>
+                </table>
+              </div>
+            </div>
+          `).join("")
+        );
+      </script>
+            
+                    <div class="question-container">
+                        <label for="like"><strong>6. What did you like about this type of audio cues?</strong></label>
+                        <input type="text" id="like" name="like" class="input-field" placeholder="">
+                    </div>
+
+                    <div class="question-container">
+                        <label for="dislike"><strong>7. What did you not like about this type of audio cues?</strong></label>
+                        <input type="text" id="dislike" name="dislike" class="input-field" placeholder="">
+                    </div>
+
+                    <div class="question-container">
+                        <label for="improvement"><strong>8. How could this type of audio cues be improved for more efficient or pleasant navigation?</strong></label>
+                        <input type="text" id="improvement" name="improvement" class="input-field" placeholder="">
+                    </div>
+
 
             <div class="submit-container">
-                <button type="submit" class="submit-btn" onclick="saveCSV()">Submit</button>
+                <button type="submit" class="submit-btn" onclick="saveExcel()">Submit</button>
             </div>
 
         </form>
     </div>
 
-    <script>
-        function saveExcel() {
-            event.preventDefault(); // Prevent default form submission
-    
-            let participantId = document.getElementById("participantId").value.trim();
-            let conditionId = document.getElementById("conditionId").value.trim();
-    
-            if (!participantId || !conditionId) {
-                alert("Please enter both Participant ID and Condition ID.");
-                return;
-            }
-    
-            let data = [["PID", participantId], ["CID", conditionId]];
-        
-    
-            // Collect UEQ-S responses
-            const questionsUEQ = [
-                "UEQ1", "UEQ2", "UEQ3", "UEQ4", "UEQ5", "UEQ6", "UEQ7", "UEQ8",
-                "UEQ9", "UEQ10", "UEQ11", "UEQ12", "UEQ13", "UEQ14", "UEQ15", "UEQ16",
-                "UEQ17", "UEQ18", "UEQ19", "UEQ20", "UEQ21", "UEQ22", "UEQ23", "UEQ24",
-                "UEQ25", "UEQ26"
-            ];
-    
-            questionsUEQ.forEach((question, index) => {
-                let selectedValue = document.querySelector(`input[name="q${index + 1}"]:checked`);
-                data.push([question, selectedValue ? selectedValue.value : " "]);
-            });
+   <script>
+    function saveExcel() {
+        event.preventDefault(); // Prevent default form submission
 
-    
-            // Convert data to a worksheet
-            let ws = XLSX.utils.aoa_to_sheet(data);
-            let wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
-    
-            // Save as Excel file
-            let fileName = `Survey_${conditionId}_${participantId}.xlsx`;
-            XLSX.writeFile(wb, fileName);
-    
-            alert("Data saved successfully as " + fileName);
+        let participantId = document.getElementById("participantId").value.trim();
+        let conditionId = document.getElementById("conditionId").value.trim();
+
+        if (!participantId || !conditionId) {
+            alert("Please enter both Participant ID and Condition ID.");
+            return;
         }
-    </script>
 
+        let data = [["PID", participantId], ["CID", conditionId]];
+
+        // Collect UEQ responses (q7 to q32, corresponding to UEQ1 to UEQ26)
+        for (let i = 7; i <= 32; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            data.push([`UEQ${i - 6}`, selected ? selected.value : ""]);
+        }
+
+        // Collect Audio custom questionnaire (aq1 to aq5)
+        for (let i = 1; i <= 5; i++) {
+            const selected = document.querySelector(`input[name="aq${i}"]:checked`);
+            data.push([`AudioQ${i}`, selected ? selected.value : ""]);
+        }
+
+        // Open-text fields
+        let like = document.getElementById("like").value.trim();
+        let dislike = document.getElementById("dislike").value.trim();
+        let improvement = document.getElementById("improvement").value.trim();
+        data.push(["Like", like || "Not Provided"]);
+        data.push(["Dislike", dislike || "Not Provided"]);
+        data.push(["Suggestions", improvement || "Not Provided"]);
+
+        // Convert data to a worksheet
+        let ws = XLSX.utils.aoa_to_sheet(data);
+        let wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
+
+        // Save as Excel file
+        let fileName = `Survey_participant${participantId}_condition${conditionId}.xlsx`;
+        XLSX.writeFile(wb, fileName);
+
+        alert("Data saved successfully as " + fileName);
+    }
+</script>
 </body>
 </html>
