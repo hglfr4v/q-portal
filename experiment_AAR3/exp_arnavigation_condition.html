@@ -97,6 +97,45 @@
                 </div>
             `).join(""));
             </script>
+            <h1>NASA-TLX </h1>
+        <p class="description">
+            The questionnaire consists of pairs of contrasting attributes that may apply to the product/experience.
+            The circles between the attributes represent gradations between the opposites.
+            You can express your agreement with the attributes by ticking the circle that most closely reflects your impression.
+            Please decide spontaneously. Don’t think too long about your decision to make sure that you convey your original impression.
+            Sometimes you may not be completely sure about your agreement with a particular attribute or you may find that the attribute does not apply completely to the particular product/experience.
+            Nevertheless, please tick a circle in every line.
+            It is your personal opinion that counts. Please remember: there is no wrong or right answer!
+        </p>
+             <script>
+                
+                const questions = [
+                    ["Mental Demand", "How mentally demanding was the task?", "Very Low", "Very High"],
+                    ["Physical Demand", "How physically demanding was the task?", "Very Low", "Very High"],
+                    ["Temporal Demand", "How hurried or rushed was the pace of the task?", "Very Low", "Very High"],
+                    ["Performance", "How successful were you in accomplishing what you were asked to do?", "Perfect", "Failure"],
+                    ["Effort", "How hard did you have to work to accomplish your level of performance?", "Very Low", "Very High"],
+                    ["Frustration", "How insecure, discouraged, irritated, stressed, and annoyed were you?", "Very Low", "Very High"]
+                ];
+
+                document.write(questions.map((q, index) => `
+                    <div class="question-container">
+                        <h3>${q[0]}</h3>
+                        <p>${q[1]}</p>
+                        <div class="radio-group">
+                            <div class="scale-labels"><span>${q[2]}</span><span>${q[3]}</span></div>
+                            <table class="radio-table">
+                                <tr>
+                                    ${Array.from({ length: 21 }, (_, i) => `
+                                        <td><input type="radio" name="q${index + 1}" value="${i + 1}" required></td>
+                                    `).join("")}
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                `).join(""));
+            </script>
+
             <h2>Custom Questionnaire</h2>
                 <p class="description">
                     This short custom questionnaire evaluates your experience with the audio cues used for navigation. It includes both scaled responses and open-ended questions to better understand what aspects were effective, unclear, or could be improved.
@@ -327,6 +366,11 @@
 
     let data = [["PID", participantId], ["CID", conditionId]];
 
+    // --- NASA-TLX responses ---
+for (let i = 1; i <= 6; i++) {
+    let selected = document.querySelector(`input[name="q${i}"]:checked`);
+    data.push([`NASA${i}`, selected ? selected.value : ""]);
+}
     // --- UEQ responses ---
     for (let i = 1; i <= 26; i++) {
         let selected = document.querySelector(`input[name="q${i}"]:checked`);
