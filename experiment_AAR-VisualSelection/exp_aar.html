@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sound Selection Survey</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-arrow {
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
+
+    .back-arrow:hover {
+        color: #0056b3;
+    }
+
+    .input-field {
+        margin: 8px 0;
+        padding: 10px;
+        width: 50%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 0.95rem;
+    }
+
+    /* -------- Demographic questions -------- */
+
+    .question-container {
+        margin: 16px 0;
+        padding: 14px 18px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .question-container strong,
+    .question-container label[for="age"] {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.95rem;
+    }
+
+    #age {
+        width: 120px;
+    }
+
+    .radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 6px;
+    }
+
+    .radio-group label {
+        position: relative;
+        padding: 8px 14px 8px 32px;
+        border-radius: 999px;
+        border: 1px solid #ccc;
+        background: #fff;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .radio-group input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* custom circle */
+    .radio-group label::before {
+        content: "";
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid #bbb;
+        background: #fff;
+        box-sizing: border-box;
+    }
+
+    .radio-group label:has(input[type="radio"]:checked) {
+        background: #007bff;
+        color: #fff;
+        border-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+    }
+
+    .radio-group label:has(input[type="radio"]:checked)::before {
+        border-color: #fff;
+        background: #fff;
+        box-shadow: inset 0 0 0 4px #007bff;
+    }
+
+    /* -------- Image cards -------- */
+
+    .sections-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .section {
+        flex: 1 1 30%;        /* bigger cards – ~3 per row */
+        min-width: 260px;
+        background: #f9f9f9;
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 8px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-title {
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .figure-option {
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .figure-option input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .figure-option figure {
+        margin: 0;
+        width: 100%;
+    }
+
+    /* bigger images */
+    .figure-option img {
+        display: block;
+        width: 100%;
+        height: 280px;         /* increased from 220px */
+        object-fit: contain;   /* whole avatar visible */
+        border-radius: 6px;
+    }
+
+    .figure-option figcaption {
+        margin-top: 8px;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    /* highlight selected image card */
+    .figure-option:has(input:checked) figure {
+        border: 2px solid #007bff;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+        border-radius: 8px;
+    }
+
+    #save-btn {
+        margin-top: 30px;
+        display: block;
+        font-size: 16px;
+        padding: 12px 24px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #save-btn:hover {
+        background-color: #45a049;
+        transform: scale(1.03);
+    }
+
+    #save-btn:active {
+        background-color: #3e8e41;
+        transform: scale(0.97);
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+
+        <a href="../index.html" class="back-arrow">← Back to Home</a>
+    <h1>AR Navigation Cues Preference Survey</h1>
+    <div style="margin: 10px 30px; text-align: left;">
+  <h2>Participant Information & Instructions</h2>
+  
+  <p><strong>Title:</strong><em>User preference on AR Cues for Outdoor Navigation </em></p>
+
+  <p>This experiment is part of a research project aiming to explore which types of visual cues are best suited for use in <strong>AR outdoor navigation systems</strong> (e.g., guiding users when walking through a city). In this first phase, we are investigating <strong>your preferences for different categories of AR visuals</strong> that could serve as navigation cues.</p>
+ 
+  <h4>🖼️ What You Will Do</h4>
+  <p>You will be presented with <strong>categories of visual assets</strong>concerning outdoor navigation:</p>
+  <ul>
+    <li>Auditory icons: Real-world sounds with metaphorical or literal meaning (e.g., familiar everyday sounds).</li>
+    <li>Nature sounds: Environmental sounds conveying direction or movement (e.g., wind, birds).</li>
+    <li>Artificial sounds: Non-natural, tech or mechanical interface sounds (e.g., beeps, electronic tones).</li>
+    <li>Musical instrument sounds: Short, tonal musical notes that are non-verbal (e.g., piano notes).</li>
+    <li>Spearcons: Time-compressed speech commands (very short, compressed speech).</li>
+  </ul>
+  <p>For each category, you will hear <strong>three options</strong>. Your task is to select the one you would personally <strong>prefer to see</strong> in an <em>outdoor navigation context</em>, such as “Which avatar would you prefer to follow when doing outdoor navigation?”</p>
+
+  <p>There are no right or wrong answers — we are interested in your <strong>subjective preference</strong>. Please respond as naturally and honestly as possible.</p>
+
+  <h4>🕒 Duration</h4>
+  <p>The study will take approximately <strong>10–15 minutes</strong>.</p>
+
+  <h4>🔐 Your Data</h4>
+  <p>All responses are anonymous and will be used for research purposes only. The results will help us design future navigation systems that are more intuitive, accessible, and comfortable for users in outdoor environments.</p>
+
+  <h4>✅ Ready?</h4>
+  <p>When you're ready, please enter your <strong>Participant ID</strong> and begin the survey. Make sure you're in a quiet environment where you can hear the audio clearly.</p>
+
+  <p>Thank you for your participation!</p>
+<div>
+  <input
+    type="text"
+    id="participantId"
+    class="input-field"
+    placeholder="Participant ID"
+    required
+  >
+
+        <div class="question-container">
+                        <label for="age"><strong>Age:</strong></label>
+                        <input type="number" id="age" name="age" class="input-field" placeholder="Enter age">
+                    </div>
+            
+                    <div class="question-container">
+                        <strong>Gender</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="gender" value="Weiblich" required> Woman</label>
+                            <label><input type="radio" name="gender" value="Männlich"> Man</label>
+                            <label><input type="radio" name="gender" value="Divers"> Divers</label>
+                            <label><input type="radio" name="gender" value="Keine Angabe"> No Answer</label>
+                        </div>
+                    </div>
+            
+                    <div class="question-container">
+                        <strong>Previous experience with AR systems:</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="arExperience" value="no" required> No experience (0h)</label>
+                            <label><input type="radio" name="arExperience" value="little"> Little experience (1-10h)</label>
+                            <label><input type="radio" name="arExperience" value="some"> Some experience (11-30h)</label>
+                            <label><input type="radio" name="arExperience" value="lots"> Lots of experience (31-100h)</label>
+                        </div>
+                    </div>
+
+  <form id="audio-form">
+    <!-- ===================== CATEGORY 1 ===================== -->
+    <h3>Category 1: Avatars to follow</h3>
+    <p>
+      In this category, you see an avatar that walks ahead of you. The image represents the view
+      through your smartphone’s camera in an augmented reality environment. During navigation, the
+      avatar moves forward along the route, and you would follow it to reach your destination.
+      Because the image is static, the avatar appears frozen in place, but in actual use it would
+      continuously walk in front of you. As you move your phone or change your position, the avatar
+      would remain aligned with the route, maintaining its position ahead of you so that you can
+      follow it.
+    </p>
+
+    <div class="sections-wrapper">
+      <!-- Dog Avatar -->
+      <div class="section" id="cat1-dog">
+        <div class="section-title">Dog Avatar</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="avatarPreference"
+            value="dog"
+            required
+          >
+          <figure>
+            <img
+              src="../assets/figures/avatar_dog.jpg"
+              alt="Dog Avatar "
+            >
+            <figcaption>Dog Avatar walking ahead</figcaption>
+          </figure>
+        </label>
+      </div>
+
+      <!-- Nature -->
+      <div class="section" id="cat2-human">
+        <div class="section-title">Human Avatar</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="avatarPreference"
+            value="human"
+          >
+          <figure>
+            <img
+              src="../assets/figures/avatar_person.jpg"
+              alt="Human Avatar"
+            >
+            <figcaption>Human Avatar walking ahead</figcaption>
+          </figure>
+        </label>
+      </div>
+
+      <!-- Spearcons-like visual -->
+      <div class="section" id="cat1-robot">
+        <div class="section-title">Robot Avatar</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="avatarPreference"
+            value="robot"
+          >
+          <figure>
+            <img
+              src="../assets/figures/avatar_robot.jpg"
+              alt="Robot Avatar"
+            >
+            <figcaption>Robot Avatar walking ahead</figcaption>
+          </figure>
+        </label>
+      </div>
+    </div>
+    <!-- ===================== CATEGORY 2 ===================== -->
+    <h3>Category 2: Arrows</h3>
+    <p>
+      In this category, an arrow appears on the screen and points toward your destination. The image
+      represents the view through your smartphone’s camera in an augmented reality environment. The
+      arrow continuously rotates so that it always points in the direction you need to walk.
+      Because the image you see is static, the arrow does not move here, but during actual use it
+      would adjust its orientation as you move your phone or change your position. If you turn away
+      from the correct direction, the arrow would rotate accordingly, guiding you back toward your
+      destination.
+    </p>
+
+    <div class="sections-wrapper">
+      <!-- Artificial -->
+      <div class="section" id="cat2-many">
+        <div class="section-title">Many Arrows</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="arrowPreference"
+            value="many"
+            required
+          >
+          <figure>
+            <img
+              src="../assets/figures/arrow_many.jpg"
+              alt="Many Arrows"
+            >
+            <figcaption>Many arrows</figcaption>
+          </figure>
+        </label>
+      </div>
+
+      <!-- Nature -->
+      <div class="section" id="cat2-front">
+        <div class="section-title">Front Arrow</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="arrowPreference"
+            value="front"
+          >
+          <figure>
+            <img
+              src="../assets/figures/arrow_front.jpg"
+              alt="Front Arrow"
+            >
+            <figcaption>Front Arrow</figcaption>
+          </figure>
+        </label>
+      </div>
+
+      <!-- Spearcons-like -->
+      <div class="section" id="cat2-ground">
+        <div class="section-title">Ground Arrow</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="arrowPreference"
+            value="ground"
+          >
+          <figure>
+            <img
+              src="../assets/figures/arrow_ground.jpg"
+              alt="Ground Arrow"
+            >
+            <figcaption>Ground Arrow</figcaption>
+          </figure>
+        </label>
+      </div>
+    </div>
+
+    <!-- ===================== CATEGORY 3 ===================== -->
+    <h3>Category 3: “Lines”</h3>
+    <p>
+   In this category, a line—or an elongated object resembling a line—appears on the screen and extends toward the destination. The image represents the view through your smartphone’s camera in an augmented reality environment. The line is displayed as if it continues infinitely in the direction you need to walk.
+Because the image you see is static, the line appears fixed, but during actual use it would remain anchored in the real world and would extend forward along the correct route. As you move your phone or change your position, the line would stay aligned with the direction of your destination. If you turn away, the line may move out of your field of view, and you would need to turn back toward it to reorient yourself.
+
+    </p>
+
+    <div class="sections-wrapper">
+      <div class="section" id="cat3-neon">
+        <div class="section-title">Neon</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="linePreference"
+            value="neon"
+            required
+          >
+          <figure>
+            <img
+              src="../assets/figures/line_neon.jpg"
+              alt="Neon light line cue in AR"
+            >
+            <figcaption>Neon light</figcaption>
+          </figure>
+        </label>
+      </div>
+
+      <div class="section" id="cat3-trace">
+        <div class="section-title">Traces</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="linePreference"
+            value="traces"
+          >
+          <figure>
+            <img
+              src="../assets/figures/line_traces.jpg"
+              alt="traces line cue in AR"
+            >
+            <figcaption>Traces line</figcaption>
+          </figure>
+        </label>
+      </div>
+
+      <div class="section" id="cat3-rope">
+        <div class="section-title">Rope</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="linePreference"
+            value="rope"
+          >
+          <figure>
+            <img
+              src="../assets/figures/line_rope.jpg"
+              alt="Rope line cue in AR"
+            >
+            <figcaption>Rope line</figcaption>
+          </figure>
+        </label>
+      </div>
+    </div>
+
+    <!-- ===================== CATEGORY 4 ===================== -->
+    <h3>Category 4: Direction nudging objects</h3>
+    <p>
+In this category, a swarm of small animals or a drone appears on the screen and guides you toward the correct direction. The image represents the view through your smartphone’s camera in an augmented reality environment. The objects move across your field of view in a way that subtly nudges your attention toward the correct heading.
+Because the image you see is static, the objects appear frozen in place. In actual use, however, the swarm or drone would fly through your field of view and then continue moving into the correct direction of travel. You would follow the movement of these guiding objects to stay on the intended route. After nudging you toward the right direction, the object stay in your field of vision for you to follow.
+    </p>
+
+    <div class="sections-wrapper">
+      <div class="section" id="cat4-birds">
+        <div class="section-title">Birds</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="nudgingPreference"
+            value="birds"
+            required
+          >
+          <figure>
+            <img
+              src="../assets/figures/nudging_birds.jpg"
+              alt="Birds"
+            >
+            <figcaption>Birds flying</figcaption>
+          </figure>
+        </label>
+      </div>
+
+      <div class="section" id="cat4-butterflies">
+        <div class="section-title">Butterflies</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="nudgingPreference"
+            value="butterflies"
+          >
+          <figure>
+            <img
+              src="../assets/figures/nudging_butterflies.jpeg"
+              alt="Butterflies"
+            >
+            <figcaption>Butterflies swarm</figcaption>
+          </figure>
+        </label>
+      </div>
+
+      <div class="section" id="cat4-drone">
+        <div class="section-title">Drone</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="nudgingPreference"
+            value="drone"
+          >
+          <figure>
+            <img
+              src="../assets/figures/nudging_drone.jpg"
+              alt="Drone"
+            >
+            <figcaption>Drone flying</figcaption>
+          </figure>
+        </label>
+      </div>
+    </div>
+
+    <!-- ===================== CATEGORY 5 ===================== -->
+    <h3>Category 5: Goal markers at the horizon</h3>
+    <p>In this category, the visual cue marks the destination by placing an object at the horizon. The image you see represents the view through your smartphone’s camera in an augmented reality environment. The object shown at the horizon hovers directly above the location of your destination, indicating the direction you should move toward.
+If you move your phone, the object remains fixed in the same real-world location. As a result, if you walk or turn away, the object may move out of your field of view. To relocate it, you must turn your phone (or yourself) back toward the object. This allows you to determine the correct direction of your destination.
+    </p>
+
+    <div class="sections-wrapper">
+      <div class="section" id="cat5-">
+        <div class="section-title">Flag</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="markerPreference"
+            value="flag"
+            required
+          >
+          <figure>
+            <img
+              src="../assets/figures/marker_flag.png"
+              alt="Flag marker"
+            >
+            <figcaption>Flag marker at the horizon</figcaption>
+          </figure>
+        </label>
+      </div>
+
+      <div class="section" id="cat5-lightbeam">
+        <div class="section-title">Light Beam</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="markerPreference"
+            value="lightbeam"
+          >
+          <figure>
+            <img
+              src="../assets/figures/marker_light+beam.jpeg"
+              alt="Light beam marker at the horizon"
+            >
+            <figcaption>Light beam marker at the horizon</figcaption>
+          </figure>
+        </label>
+      </div>
+
+      <div class="section" id="cat5-locationpin">
+        <div class="section-title">Location Pin</div>
+        <label class="figure-option">
+          <input
+            type="radio"
+            name="markerPreference"
+            value="locationpin"
+          >
+          <figure>
+            <img
+              src="../assets/figures/marker_location+marker.png"
+              alt="Location pin marker at the horizon"
+            >
+            <figcaption>Location pin marker at the horizon</figcaption>
+          </figure>
+        </label>
+      </div>
+    </div>
+
+    <button type="button" id="save-btn" onclick="saveResults()">💾 Save Answers</button>
+  </form>
+</div>
+
+<script>
+  function saveResults() {
+    const participantId = document.getElementById('participantId').value.trim();
+    const age = document.getElementById('age').value.trim();
+    const genderEl = document.querySelector('input[name="gender"]:checked');
+    const arExpEl = document.querySelector('input[name="arExperience"]:checked');
+
+    const form = document.getElementById('audio-form');
+    const data = new FormData(form);
+
+    // ---- Basic checks ----
+    if (!participantId) {
+      alert("Please enter your Participant ID.");
+      return;
+    }
+
+    // validate demographics
+    const missing = [];
+
+    if (!age) missing.push("Age");
+    if (!genderEl) missing.push("Gender");
+    if (!arExpEl) missing.push("Previous experience with AR systems");
+
+    // validate category answers (names must match your HTML)
+    const requiredPrefs = [
+      "avatarPreference",
+      "arrowPreference",
+      "linePreference",
+      "nudgingPreference",
+      "markerPreference"
+    ];
+
+    requiredPrefs.forEach(name => {
+      if (!data.get(name)) {
+        missing.push(name);
+      }
+    });
+
+    if (missing.length > 0) {
+      alert(
+        "Please answer all required questions before saving:\n\n" +
+        missing.join(", ")
+      );
+      return;
+    }
+
+    // ---- Build selections object ----
+    const selections = {
+      ParticipantID: participantId,
+      Age: age,
+      Gender: genderEl ? genderEl.value : "",
+      AR_Experience: arExpEl ? arExpEl.value : ""
+    };
+
+    // preferences from the form
+    for (let [key, value] of data.entries()) {
+      selections[key] = value;
+    }
+
+    // ---- CSV creation (simple, one line) ----
+    const headers = Object.keys(selections).join(",");
+    const values = Object.values(selections)
+      .map(v => `"${String(v).replace(/"/g, '""')}"`) // escape quotes
+      .join(",");
+    const csvContent = headers + "\n" + values;
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `ar_visual_survey_${participantId}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    console.log("CSV saved:", csvContent);
+  }
+</script>
+</body>
+</html>
