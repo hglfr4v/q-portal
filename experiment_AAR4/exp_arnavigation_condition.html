@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>UEQ - Complete</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+        .back-arrow { text-decoration: none; font-size: 18px; font-weight: bold; display: block; margin-bottom: 20px; color: #007bff; text-align: left; }
+        .back-arrow:hover { color: #0056b3; }
+        .question-container { margin-bottom: 20px; }
+        .question-container p { font-size: 20px; font-weight: bold; } /* Increased font size */
+        .radio-group { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .radio-table { width: 100%; border-collapse: collapse; border-radius: 3px; overflow: hidden; text-align: center; }
+        .radio-table td { padding: 10px; border: 1px solid #ccc; }
+        .radio-table input { transform: scale(1.5); } /* Larger radio buttons */
+        .scale-labels { display: flex; justify-content: space-between; width: 100%; font-weight: bold; }
+        .submit-container { text-align: center; margin-top: 20px; } /* Centering the button */
+        .submit-btn { display: inline-block; width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .submit-btn:hover { background-color: #0056b3; }
+       .input-field { margin: 10px 0; padding: 10px; width: 80%; /* Wider input fields */ border: 1px solid #ccc; border-radius: 5px; font-size: 16px; /* Make text larger and easier to read */ box-sizing: border-box; }
+        textarea.input-field { height: 80px; /* More space for writing */ resize: vertical; }
+        .description{text-align: justify;}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="exp_arnavigation.html" class="back-arrow">← Back to Home</a>
+        
+        <p>Please enter your participant ID and condition ID before submitting.</p>
+
+        <!-- Input fields for participant ID and condition -->
+        <input type="text" id="participantId" class="input-field" placeholder="Participant ID" required>
+        <input type="text" id="conditionId" class="input-field" placeholder="Condition ID" required>
+        <h1>User Experience Questionnaire - UEQ </h1>
+        <p class="description">
+            The questionnaire consists of pairs of contrasting attributes that may apply to the product/experience.
+            The circles between the attributes represent gradations between the opposites.
+            You can express your agreement with the attributes by ticking the circle that most closely reflects your impression.
+            Please decide spontaneously. Don’t think too long about your decision to make sure that you convey your original impression.
+            Sometimes you may not be completely sure about your agreement with a particular attribute or you may find that the attribute does not apply completely to the particular product/experience.
+            Nevertheless, please tick a circle in every line.
+            It is your personal opinion that counts. Please remember: there is no wrong or right answer!
+        </p>
+        <form id="fullForm">
+
+            <!-- Loop through all 26 questions -->
+            <script>
+                const questionsUEQ = [
+                    ["Annoying", "Enjoyable"],
+                    ["Not Understandable", "Understandable"],
+                    ["Creative", "Dull"],
+                    ["Easy to Learn", "Difficult to Learn"],
+                    ["Valuable", "Inferior"],
+                    ["Boring", "Exciting"],
+                    ["Not Interesting", "Interesting"],
+                    ["Unpredictable", "Predictable"],
+                    ["Fast", "Slow"],
+                    ["Inventive", "Conventional"],
+                    ["Obstructive", "Supportive"],
+                    ["Good", "Bad"],
+                    ["Complicated", "Easy"],
+                    ["Unlikable", "Pleasing"],
+                    ["Usual", "Leading Edge"],
+                    ["Unpleasant", "Pleasant"],
+                    ["Secure", "Not Secure"],
+                    ["Motivating", "Demotivating"],
+                    ["Meets Expectations", "Does Not Meet Expectations"],
+                    ["Inefficient", "Efficient"],
+                    ["Clear", "Confusing"],
+                    ["Impractical", "Practical"],
+                    ["Organized", "Cluttered"],
+                    ["Attractive", "Unattractive"],
+                    ["Friendly", "Unfriendly"],
+                    ["Conservative", "Innovative"]
+                ];
+
+                document.write(questionsUEQ.map((pair, index) => `
+                <div class="question-container">
+                    <div class="radio-group">
+                        <div class="scale-labels"><span>${pair[0]}</span><span>${pair[1]}</span></div>
+                        <table class="radio-table">
+                            <tr>
+                                <td><input type="radio" name="q${index + 7}" value="1" required></td>
+                                <td><input type="radio" name="q${index + 7}" value="2" required></td>
+                                <td><input type="radio" name="q${index + 7}" value="3" required></td>
+                                <td><input type="radio" name="q${index + 7}" value="4" required></td>
+                                <td><input type="radio" name="q${index + 7}" value="5" required></td>
+                                <td><input type="radio" name="q${index + 7}" value="6" required></td>
+                                <td><input type="radio" name="q${index + 7}" value="7" required></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            `).join(""));
+            </script>
+            <h1>NASA-TLX </h1>
+        <p class="description">
+            The questionnaire consists of pairs of contrasting attributes that may apply to the product/experience.
+            The circles between the attributes represent gradations between the opposites.
+            You can express your agreement with the attributes by ticking the circle that most closely reflects your impression.
+            Please decide spontaneously. Don’t think too long about your decision to make sure that you convey your original impression.
+            Sometimes you may not be completely sure about your agreement with a particular attribute or you may find that the attribute does not apply completely to the particular product/experience.
+            Nevertheless, please tick a circle in every line.
+            It is your personal opinion that counts. Please remember: there is no wrong or right answer!
+        </p>
+             <script>
+                
+                const questions = [
+                    ["Mental Demand", "How mentally demanding was the task?", "Very Low", "Very High"],
+                    ["Physical Demand", "How physically demanding was the task?", "Very Low", "Very High"],
+                    ["Temporal Demand", "How hurried or rushed was the pace of the task?", "Very Low", "Very High"],
+                    ["Performance", "How successful were you in accomplishing what you were asked to do?", "Perfect", "Failure"],
+                    ["Effort", "How hard did you have to work to accomplish your level of performance?", "Very Low", "Very High"],
+                    ["Frustration", "How insecure, discouraged, irritated, stressed, and annoyed were you?", "Very Low", "Very High"]
+                ];
+
+                document.write(questions.map((q, index) => `
+                    <div class="question-container">
+                        <h3>${q[0]}</h3>
+                        <p>${q[1]}</p>
+                        <div class="radio-group">
+                            <div class="scale-labels"><span>${q[2]}</span><span>${q[3]}</span></div>
+                            <table class="radio-table">
+                                <tr>
+                                    ${Array.from({ length: 21 }, (_, i) => `
+                                        <td><input type="radio" name="q${index + 1}" value="${i + 1}" required></td>
+                                    `).join("")}
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                `).join(""));
+            </script>
+
+            <h2>Custom Questionnaire</h2>
+                <p class="description">
+                    This short custom questionnaire evaluates your experience with the audio cues used for navigation. It includes both scaled responses and open-ended questions to better understand what aspects were effective, unclear, or could be improved.
+                </p>
+
+             <!-- ----------- Navigation/Audio/Device Section appended ----------- -->
+            <h2>A. Overall Navigation Experience</h2>
+            <div class="question-container">
+                <p>1. I had a positive navigation experience during this condition.</p>
+                <div class="scale-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <table class="radio-table"><tr>
+                    <td><input type="radio" name="overall1" value="1" required></td>
+                    <td><input type="radio" name="overall1" value="2" required></td>
+                    <td><input type="radio" name="overall1" value="3" required></td>
+                    <td><input type="radio" name="overall1" value="4" required></td>
+                    <td><input type="radio" name="overall1" value="5" required></td>
+                    <td><input type="radio" name="overall1" value="6" required></td>
+                    <td><input type="radio" name="overall1" value="7" required></td>
+                </tr></table>
+            </div>
+            <div class="question-container">
+                <p>2. The navigation in this condition was effective.</p>
+                <div class="scale-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <table class="radio-table"><tr>
+                    <td><input type="radio" name="overall2" value="1" required></td>
+                    <td><input type="radio" name="overall2" value="2" required></td>
+                    <td><input type="radio" name="overall2" value="3" required></td>
+                    <td><input type="radio" name="overall2" value="4" required></td>
+                    <td><input type="radio" name="overall2" value="5" required></td>
+                    <td><input type="radio" name="overall2" value="6" required></td>
+                    <td><input type="radio" name="overall2" value="7" required></td>
+                </tr></table>
+            </div>
+            <div class="question-container">
+                <p>3. The navigation experience in this condition was pleasant.</p>
+                <div class="scale-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <table class="radio-table"><tr>
+                    <td><input type="radio" name="overall3" value="1" required></td>
+                    <td><input type="radio" name="overall3" value="2" required></td>
+                    <td><input type="radio" name="overall3" value="3" required></td>
+                    <td><input type="radio" name="overall3" value="4" required></td>
+                    <td><input type="radio" name="overall3" value="5" required></td>
+                    <td><input type="radio" name="overall3" value="6" required></td>
+                    <td><input type="radio" name="overall3" value="7" required></td>
+                </tr></table>
+            </div>
+            <div class="question-container">
+                <label for="open1"><strong>What did you like about this condition?</strong></label>
+                <textarea id="open1" name="open1" class="input-field" rows="2"></textarea>
+            </div>
+            <div class="question-container">
+                <label for="open2"><strong>What did you not like about this condition?</strong></label>
+                <textarea id="open2" name="open2" class="input-field" rows="2"></textarea>
+            </div>
+            <div class="question-container">
+                <label for="open3"><strong>How could this condition be improved for more efficient or pleasant navigation?</strong></label>
+                <textarea id="open3" name="open3" class="input-field" rows="2"></textarea>
+            </div>
+
+            <h2>B. Visual Cue Experience</h2>
+            <div class="question-container">
+                <p>1. I had a positive navigation experience with this visual cue.</p>
+                <div class="scale-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <table class="radio-table"><tr>
+                    <td><input type="radio" name="visual1" value="1" required></td>
+                    <td><input type="radio" name="visual1" value="2" required></td>
+                    <td><input type="radio" name="visual1" value="3" required></td>
+                    <td><input type="radio" name="visual1" value="4" required></td>
+                    <td><input type="radio" name="visual1" value="5" required></td>
+                    <td><input type="radio" name="visual1" value="6" required></td>
+                    <td><input type="radio" name="visual1" value="7" required></td>
+                </tr></table>
+            </div>
+            <div class="question-container">
+                <p>2. The navigation with this visual cue was effective.</p>
+                <div class="scale-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <table class="radio-table"><tr>
+                    <td><input type="radio" name="visual2" value="1" required></td>
+                    <td><input type="radio" name="visual2" value="2" required></td>
+                    <td><input type="radio" name="visual2" value="3" required></td>
+                    <td><input type="radio" name="visual2" value="4" required></td>
+                    <td><input type="radio" name="visual2" value="5" required></td>
+                    <td><input type="radio" name="visual2" value="6" required></td>
+                    <td><input type="radio" name="visual2" value="7" required></td>
+                </tr></table>
+            </div>
+            <div class="question-container">
+                <p>3. The navigation experience with this visual cue was pleasant.</p>
+                <div class="scale-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <table class="radio-table"><tr>
+                    <td><input type="radio" name="visual3" value="1" required></td>
+                    <td><input type="radio" name="visual3" value="2" required></td>
+                    <td><input type="radio" name="visual3" value="3" required></td>
+                    <td><input type="radio" name="visual3" value="4" required></td>
+                    <td><input type="radio" name="visual3" value="5" required></td>
+                    <td><input type="radio" name="visual3" value="6" required></td>
+                    <td><input type="radio" name="visual3" value="7" required></td>
+                </tr></table>
+            </div>
+            <div class="question-container">
+                <p>4. I was able to clearly perceive the direction of this visual cue.</p>
+                <div class="scale-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+                <table class="radio-table"><tr>
+                    <td><input type="radio" name="visual4" value="1" required></td>
+                    <td><input type="radio" name="visual4" value="2" required></td>
+                    <td><input type="radio" name="visual4" value="3" required></td>
+                    <td><input type="radio" name="visual4" value="4" required></td>
+                    <td><input type="radio" name="visual4" value="5" required></td>
+                    <td><input type="radio" name="visual4" value="6" required></td>
+                    <td><input type="radio" name="visual4" value="7" required></td>
+                </tr></table>
+            </div>
+            <div class="question-container">
+                <label for="open4"><strong>Do you have any comments about using this visual cue during navigation?</strong></label>
+                <textarea id="open4" name="open4" class="input-field" rows="2"></textarea>
+            </div>
+
+           
+            <!-- ---------------- END appended ---------------- -->
+
+            <div class="submit-container">
+                <button type="submit" class="submit-btn" onclick="saveExcel(event)">Submit</button>
+            </div>
+
+                
+
+        </form>
+    </div>
+
+   <script>
+   function saveExcel(event) {
+    event.preventDefault();
+
+    const form = document.getElementById("fullForm");
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    let participantId = document.getElementById("participantId").value.trim();
+    let conditionId = document.getElementById("conditionId").value.trim();
+    if (!participantId || !conditionId) {
+        alert("Please enter both Participant ID and Condition ID.");
+        return;
+    }
+
+    let data = [["PID", participantId], ["CID", conditionId]];
+
+    // --- NASA-TLX responses ---
+for (let i = 1; i <= 6; i++) {
+    let selected = document.querySelector(`input[name="q${i}"]:checked`);
+    data.push([`NASA${i}`, selected ? selected.value : ""]);
+}
+    // --- UEQ responses ---
+    for (let i = 1; i <= 26; i++) {
+        let selected = document.querySelector(`input[name="q${i}"]:checked`);
+        data.push([`UEQ${i}`, selected ? selected.value : ""]);
+    }
+
+    // --- Navigation/Visual Section ---
+    let navQuestions = ['overall1','overall2','overall3'];
+    navQuestions.forEach((name, i) => {
+        let val = document.querySelector(`input[name="${name}"]:checked`);
+        data.push([`NavExp_A${i+1}`, val ? val.value : ""]);
+    });
+    data.push(["NavExp_A_Like", document.getElementById("open1") ? document.getElementById("open1").value.trim() : ""]);
+    data.push(["NavExp_A_Dislike", document.getElementById("open2") ? document.getElementById("open2").value.trim() : ""]);
+    data.push(["NavExp_A_Improve", document.getElementById("open3") ? document.getElementById("open3").value.trim() : ""]);
+
+    let visualQuestions = ['visual1','visual2','visual3','visual4'];
+    visualQuestions.forEach((name, i) => {
+        let val = document.querySelector(`input[name="${name}"]:checked`);
+        data.push([`NavExp_B${i+1}`, val ? val.value : ""]);
+    });
+    data.push(["NavExp_B_Comment", document.getElementById("open4") ? document.getElementById("open4").value.trim() : ""]);
+
+
+    // Export to Excel
+    let ws = XLSX.utils.aoa_to_sheet(data);
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
+    let fileName = `Survey_PID${participantId}_CID${conditionId}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+
+    alert("Thank you! Data saved as " + fileName);
+    document.getElementById("fullForm").reset();
+}
+</script>
+</body>
+</html>
