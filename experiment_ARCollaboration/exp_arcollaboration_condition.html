@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <title>NASA-TLX + UEQ-S + Social Presence (Networked Minds)</title>
+
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; padding:20px; text-align:center; }
+    .container { max-width: 1100px; margin:auto; background:#fff; padding:24px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,.08); text-align:left; }
+    h2, h3 { text-align:center; margin: 8px 0 12px; }
+    h4 { margin: 16px 0 10px; }
+    p.helper { text-align:center; margin-top:0; color:#444; }
+
+    .question-block { margin: 18px 0 22px; padding: 14px; border: 1px solid #e6e6e6; border-radius: 10px; background:#fafafa; }
+    .q-title { font-size: 18px; font-weight: 800; margin: 0 0 6px; }
+    .q-desc { margin: 0 0 10px; color:#333; }
+
+    .scale-labels { display:flex; justify-content:space-between; width:100%; font-weight:700; margin: 6px 0 8px; color:#222; }
+    .radio-table { width:100%; border-collapse:collapse; text-align:center; table-layout: fixed; }
+    .radio-table td { padding: 10px 0; border:1px solid #ddd; }
+    .radio-table input { transform: scale(1.35); }
+
+    .meta-row { display:flex; gap:12px; flex-wrap:wrap; margin: 10px 0 18px; }
+    .field { flex:1; min-width: 220px; }
+    .field label { font-weight:800; display:block; margin-bottom:6px; }
+    .input-field { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; }
+
+    .submit-container { text-align:center; margin-top: 22px; }
+    .submit-btn { width:100%; padding: 14px; border:none; border-radius:10px; background:#007bff; color:white; font-size:16px; font-weight:800; cursor:pointer; }
+    .submit-btn:hover { background:#0056b3; }
+
+    .section-divider { margin: 18px 0; border: none; border-top: 1px solid #eee; }
+    .small-note { font-size: 12px; color:#666; text-align:center; margin-top: 6px; }
+
+    /* Networked Minds tables */
+    .nm-table { width:100%; border-collapse: collapse; margin: 10px 0 18px; }
+    .nm-table th, .nm-table td { border: 1px solid #ddd; padding: 10px; vertical-align: top; }
+    .nm-table th { background: #f2f6ff; font-weight: 900; text-align: center; }
+    .nm-item { font-weight: 400; margin-bottom: 8px; }
+    .nm-scale { display:flex; gap:10px; flex-wrap: wrap; align-items: center; justify-content: flex-start; }
+    .nm-scale label { display:inline-flex; align-items:center; gap:6px; font-weight: 600; }
+    .nm-scale input { transform: scale(1.25); }
+
+    @media (max-width: 720px) {
+      .radio-table td { padding: 8px 0; }
+      .radio-table input { transform: scale(1.2); }
+      .nm-scale input { transform: scale(1.15); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Post-Task Questionnaires</h2>
+    <p class="helper">Please answer all items. Your responses will be saved as an Excel file.</p>
+
+    <form id="surveyForm">
+
+      <!-- Basic info -->
+      <div class="meta-row">
+        <div class="field">
+          <label for="participantId">Participant ID *</label>
+          <input class="input-field" type="text" id="participantId" name="participantId" placeholder="e.g., P01" required />
+        </div>
+        <div class="field">
+          <label for="condition">Condition (optional)</label>
+          <input class="input-field" type="text" id="condition" name="condition" placeholder="e.g., AR / VR / Control" />
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <!-- NASA TLX -->
+      <h3>NASA-TLX</h3>
+      <p class="helper">21-point scale (1 = left label, 21 = right label)</p>
+
+      <script>
+        const questionsNasa = [
+          ["Mental Demand", "How mentally demanding was the task?", "Very Low", "Very High"],
+          ["Physical Demand", "How physically demanding was the task?", "Very Low", "Very High"],
+          ["Temporal Demand", "How hurried or rushed was the pace of the task?", "Very Low", "Very High"],
+          ["Performance", "How successful were you in accomplishing what you were asked to do?", "Perfect", "Failure"],
+          ["Effort", "How hard did you have to work to accomplish your level of performance?", "Very Low", "Very High"],
+          ["Frustration", "How insecure, discouraged, irritated, stressed, and annoyed were you?", "Very Low", "Very High"]
+        ];
+
+        document.write(
+          questionsNasa.map((q, index) => `
+            <div class="question-block">
+              <p class="q-title">${index + 1}. ${q[0]}</p>
+              <p class="q-desc">${q[1]}</p>
+
+              <div class="scale-labels">
+                <span>${q[2]}</span>
+                <span>${q[3]}</span>
+              </div>
+
+              <table class="radio-table">
+                <tr>
+                  ${Array.from({ length: 21 }, (_, i) => `
+                    <td>
+                      <input
+                        type="radio"
+                        name="nasa${index + 1}"
+                        value="${i + 1}"
+                        ${i === 0 ? "required" : ""}>
+                    </td>
+                  `).join("")}
+                </tr>
+              </table>
+              <div class="small-note">1 … 21</div>
+            </div>
+          `).join("")
+        );
+      </script>
+
+      <hr class="section-divider" />
+
+      <!-- UEQ-S -->
+      <h3>UEQ-S</h3>
+      <p class="helper">7-point semantic differential (left adjective ↔ right adjective)</p>
+
+      <script>
+        const questionsUEQ_S = [
+          ["Obstructive", "Supportive"],
+          ["Complicated", "Easy"],
+          ["Inefficient", "Efficient"],
+          ["Confusing", "Clear"],
+          ["Boring", "Exciting"],
+          ["Not Interesting", "Interesting"],
+          ["Conventional", "Inventive"],
+          ["Usual", "Leading Edge"]
+        ];
+
+        document.write(
+          questionsUEQ_S.map((q, index) => `
+            <div class="question-block">
+
+
+              <div class="scale-labels">
+                <span>${q[0]}</span>
+                <span>${q[1]}</span>
+              </div>
+
+              <table class="radio-table">
+                <tr>
+                  ${Array.from({ length: 7 }, (_, i) => `
+                    <td>
+                      <input
+                        type="radio"
+                        name="ueqs${index + 1}"
+                        value="${i + 1}"
+                        ${i === 0 ? "required" : ""}>
+                    </td>
+                  `).join("")}
+                </tr>
+              </table>
+
+            </div>
+          `).join("")
+        );
+      </script>
+
+      <hr class="section-divider" />
+
+      <!-- Networked Minds Social Presence -->
+      <h3>Social Presence (Networked Minds)</h3>
+      <p class="helper">For each statement, select a value on a 7-point Likert scale (1 = strongly disagree … 7 = strongly agree).</p>
+
+      <script>
+        // Helper to render a 7-point Likert under each item (in-table)
+
+
+function renderLikert7Table(name) {
+  return `
+    <div class="scale-labels">
+      <span>Strongly disagree</span>
+      <span>Strongly agree</span>
+    </div>
+
+    <table class="radio-table">
+      <tr>
+        ${Array.from({ length: 7 }, (_, i) => `
+          <td>
+            <input
+              type="radio"
+              name="${name}"
+              value="${i + 1}"
+              ${i === 0 ? "required" : ""}>
+          </td>
+        `).join("")}
+      </tr>
+    </table>
+  `;
+}
+
+
+
+
+        // ===== 1) First order: Co-presence (table: self vs other) =====
+        const nm_copresence_rows = [
+          {
+            self:  "I often felt as if (my partner) and I were in the same (room) together.",
+            other: "I think (my partner) often felt as if we were in the same room together."
+          },
+          {
+            self:  "I was often aware of (my partner) in the (room).",
+            other: "(My partner) was often aware of me in the (room)."
+          },
+          {
+            self:  "I hardly noticed (my partner) in the (room).",
+            other: "(My partner) didn’t notice me in the (room)."
+          },
+          {
+            self:  "I often felt as if we were in different places rather than together in same (room).",
+            other: "I think (my partner) often felt as if we were in different places rather than together in the same (room)."
+          }
+        ];
+
+        document.write(`
+          <h4>1. First order social presence: Co-presence</h4>
+          <table class="nm-table">
+            <thead>
+              <tr>
+                <th>Perception of self</th>
+                <th>Perception of the other</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${nm_copresence_rows.map((row, idx) => `
+                <tr>
+                  <td>
+                    <div class="nm-item">${row.self}</div>
+                    ${renderLikert7Table(`nm_cp_self_${idx+1}`)}
+                  </td>
+                  <td>
+                    <div class="nm-item">${row.other}</div>
+                    ${renderLikert7Table(`nm_cp_other_${idx+1}`)}
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `);
+
+        // ===== 2) Second order: Psycho-behavioral interaction =====
+        const nm_second_order = {
+          "Perceived attentional engagement": [
+            { self: "I paid close attention to (my partner).", other: "(My partner) paid close attention to me." },
+            { self: "I was easily distracted from (my partner) when other things were going on.", other: "(My partner) was easily distracted from me when other things were going on." },
+            { self: "I tended to ignore (my partner).", other: "(My partner) tended to ignore me." }
+          ],
+          "Perceived emotional contagion": [
+            { self: "I was sometimes influenced by (my partner’s) moods.", other: "(My partner) was sometimes influenced by my moods." },
+            { self: "When I was happy, (my partner) tended to be happy.", other: "When (my partner) was happy, I tended to be happy." },
+            { self: "When I was feeling sad (my partner) also seemed to be down.", other: "When (my partner) was feeling sad, I tended to be sad." },
+            { self: "When I was feeling nervous, (my partner) also seemed to be nervous.", other: "When (my partner) was nervous, I tended to be nervous." }
+          ],
+          "Perceived comprehension": [
+            { self: "I was able to communicate my intentions clearly to (my partner).", other: "(My partner) was able to communicate their intentions clearly to me." },
+            { self: "My thoughts were clear to (my partner).", other: "(My partner’s) thoughts were clear to me." },
+            { self: "I was able to understand what (my partner) meant.", other: "(My partner) was able to understand what I meant." }
+          ],
+          "Perceived behavioral interdependence": [
+            { self: "My actions were often dependent on (my partner’s) actions.", other: "(My partner’s) actions were often dependent on my actions." },
+            { self: "My behavior was often in direct response to (my partner’s) behavior.", other: "The behavior of (my partner) was often in direct response to my behavior." },
+            { self: "What I did often affected what (my partner) did.", other: "What (my partner) did often affected what I did." }
+          ]
+        };
+
+        document.write(`<h4>2. Second order social presence: Psycho-behavioral interaction</h4>`);
+
+        Object.entries(nm_second_order).forEach(([subscale, rows], sIdx) => {
+          document.write(`
+            <div class="question-block">
+              <p class="q-title">${subscale}</p>
+              <table class="nm-table">
+                <thead>
+                  <tr>
+                    <th>Perception of self</th>
+                    <th>Perception of the other</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rows.map((row, rIdx) => `
+                    <tr>
+                      <td>
+                        <div class="nm-item">${row.self}</div>
+                        ${renderLikert7Table(`nm_so_${sIdx+1}_self_${rIdx+1}`)}
+                      </td>
+                      <td>
+                        <div class="nm-item">${row.other}</div>
+                        ${renderLikert7Table(`nm_so_${sIdx+1}_other_${rIdx+1}`)}
+                      </td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          `);
+        });
+      </script>
+
+      <div class="submit-container">
+        <button type="submit" class="submit-btn">Submit & Save (.xlsx)</button>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("surveyForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      saveExcel();
+    });
+
+    function mustGetChecked(name) {
+      return document.querySelector(`input[name="${name}"]:checked`);
+    }
+
+    function saveExcel() {
+      const errors = [];
+      const participantId = document.getElementById("participantId").value.trim();
+      const condition = document.getElementById("condition").value.trim();
+
+      if (!participantId) errors.push("Please enter Participant ID.");
+
+      // NASA TLX (6)
+      for (let i = 1; i <= 6; i++) {
+        if (!mustGetChecked(`nasa${i}`)) errors.push(`Please answer NASA-TLX item ${i}.`);
+      }
+
+      // UEQ-S (8)
+      for (let i = 1; i <= 8; i++) {
+        if (!mustGetChecked(`ueqs${i}`)) errors.push(`Please answer UEQ-S item ${i}.`);
+      }
+
+      // Networked Minds: Co-presence (4 rows x 2 cols = 8 items)
+      for (let i = 1; i <= 4; i++) {
+        if (!mustGetChecked(`nm_cp_self_${i}`)) errors.push(`Please answer Co-presence (self) row ${i}.`);
+        if (!mustGetChecked(`nm_cp_other_${i}`)) errors.push(`Please answer Co-presence (other) row ${i}.`);
+      }
+
+      // Networked Minds: Second order
+      // subscales sizes:
+      // 1 attentional (3 rows), 2 emotional (4), 3 comprehension (3), 4 interdependence (3)
+      const soRowCounts = [3,4,3,3];
+      for (let s = 1; s <= 4; s++) {
+        for (let r = 1; r <= soRowCounts[s-1]; r++) {
+          if (!mustGetChecked(`nm_so_${s}_self_${r}`)) errors.push(`Please answer Second order (self) S${s} row ${r}.`);
+          if (!mustGetChecked(`nm_so_${s}_other_${r}`)) errors.push(`Please answer Second order (other) S${s} row ${r}.`);
+        }
+      }
+
+      if (errors.length) {
+        alert(errors.join("\n"));
+        return;
+      }
+
+      // Build Excel rows
+      const data = [];
+      data.push(["Participant ID", participantId]);
+      data.push(["Condition", condition || "Not Provided"]);
+      data.push([]);
+
+      // NASA
+      data.push(["NASA-TLX"]);
+      const nasaLabels = ["Mental Demand","Physical Demand","Temporal Demand","Performance","Effort","Frustration"];
+      for (let i = 1; i <= 6; i++) {
+        data.push([`NASA_${i}_${nasaLabels[i-1]}`, mustGetChecked(`nasa${i}`).value]);
+      }
+      data.push([]);
+
+      // UEQ-S
+      data.push(["UEQ-S"]);
+      const ueqPairs = [
+        "Obstructive–Supportive",
+        "Complicated–Easy",
+        "Inefficient–Efficient",
+        "Confusing–Clear",
+        "Boring–Exciting",
+        "Not Interesting–Interesting",
+        "Conventional–Inventive",
+        "Usual–Leading Edge"
+      ];
+      for (let i = 1; i <= 8; i++) {
+        data.push([`UEQS_${i}_${ueqPairs[i-1]}`, mustGetChecked(`ueqs${i}`).value]);
+      }
+      data.push([]);
+
+      // Networked Minds: Co-presence
+      data.push(["Networked Minds — First order: Co-presence"]);
+      const cpSelf = [
+        "I often felt as if (my partner) and I were in the same (room) together.",
+        "I was often aware of (my partner) in the (room).",
+        "I hardly noticed (my partner) in the (room).",
+        "I often felt as if we were in different places rather than together in same (room)."
+      ];
+      const cpOther = [
+        "I think (my partner) often felt as if we were in the same room together.",
+        "(My partner) was often aware of me in the (room).",
+        "(My partner) didn’t notice me in the (room).",
+        "I think (my partner) often felt as if we were in different places rather than together in the same (room)."
+      ];
+      for (let i = 1; i <= 4; i++) {
+        data.push([`NM_CP_SELF_${i}`, cpSelf[i-1], mustGetChecked(`nm_cp_self_${i}`).value]);
+        data.push([`NM_CP_OTHER_${i}`, cpOther[i-1], mustGetChecked(`nm_cp_other_${i}`).value]);
+      }
+      data.push([]);
+
+      // Networked Minds: Second order
+      data.push(["Networked Minds — Second order: Psycho-behavioral interaction"]);
+
+      const so = [
+        { name: "Perceived attentional engagement", rows: [
+          { self:"I paid close attention to (my partner).", other:"(My partner) paid close attention to me." },
+          { self:"I was easily distracted from (my partner) when other things were going on.", other:"(My partner) was easily distracted from me when other things were going on." },
+          { self:"I tended to ignore (my partner).", other:"(My partner) tended to ignore me." },
+        ]},
+        { name: "Perceived emotional contagion", rows: [
+          { self:"I was sometimes influenced by (my partner’s) moods.", other:"(My partner) was sometimes influenced by my moods." },
+          { self:"When I was happy, (my partner) tended to be happy.", other:"When (my partner) was happy, I tended to be happy." },
+          { self:"When I was feeling sad (my partner) also seemed to be down.", other:"When (my partner) was feeling sad, I tended to be sad." },
+          { self:"When I was feeling nervous, (my partner) also seemed to be nervous.", other:"When (my partner) was nervous, I tended to be nervous." },
+        ]},
+        { name: "Perceived comprehension", rows: [
+          { self:"I was able to communicate my intentions clearly to (my partner).", other:"(My partner) was able to communicate their intentions clearly to me." },
+          { self:"My thoughts were clear to (my partner).", other:"(My partner’s) thoughts were clear to me." },
+          { self:"I was able to understand what (my partner) meant.", other:"(My partner) was able to understand what I meant." },
+        ]},
+        { name: "Perceived behavioral interdependence", rows: [
+          { self:"My actions were often dependent on (my partner’s) actions.", other:"(My partner’s) actions were often dependent on my actions." },
+          { self:"My behavior was often in direct response to (my partner’s) behavior.", other:"The behavior of (my partner) was often in direct response to my behavior." },
+          { self:"What I did often affected what (my partner) did.", other:"What (my partner) did often affected what I did." },
+        ]},
+      ];
+
+      so.forEach((subscale, sIdx) => {
+        data.push([subscale.name]);
+        subscale.rows.forEach((row, rIdx) => {
+          const s = sIdx + 1, r = rIdx + 1;
+          data.push([`NM_SO_${s}_SELF_${r}`, row.self, mustGetChecked(`nm_so_${s}_self_${r}`).value]);
+          data.push([`NM_SO_${s}_OTHER_${r}`, row.other, mustGetChecked(`nm_so_${s}_other_${r}`).value]);
+        });
+        data.push([]);
+      });
+
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
+
+      const fileName = `Survey_${participantId}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      alert("Data saved successfully as " + fileName);
+    }
+  </script>
+</body>
+</html>

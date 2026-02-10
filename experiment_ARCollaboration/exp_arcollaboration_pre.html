@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>Demographics </title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+        .back-arrow { text-decoration: none; font-size: 18px; font-weight: bold; display: block; margin-bottom: 20px; color: #007bff; text-align: left; }
+        .back-arrow:hover { color: #0056b3; }
+        .question-container { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px; text-align: left; }
+        .question-container p { font-size: 20px; font-weight: bold; } /* Increased font size */
+        .radio-group { display: flex; flex-direction: column; align-items: flex-start; }
+        .radio-group label { display: flex; display: flex;  align-items: center; gap: 10px; cursor: pointer; width: 100%;}
+        .radio-group input[type="radio"] { margin: 0; }
+        .radio-table { width: 100%; border-collapse: collapse; border-radius: 3x; overflow: hidden; text-align: center; }
+        .radio-table td { padding: 10px; border: 1px solid #ccc; }
+        .radio-table input { transform: scale(1.5); } /* Larger radio buttons */
+        .scale-labels { display: flex; justify-content: space-between; width: 100%; font-weight: bold; }
+        .submit-container { text-align: center; margin-top: 20px; } /* Centering the button */
+        .submit-btn { display: inline-block; width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .submit-btn:hover { background-color: #0056b3; }
+        .input-field { margin: 10px 0; padding: 10px; width: 90%; border: 1px solid #ccc; border-radius: 5px; }
+       /* .input-field { width: 100%; padding: 5px; margin-top: 5px; }*/
+        .ati-question-container { width: 100%; margin-bottom: 20px; }
+        .ati-question-container p { font-weight: bold; font-size: 18px; margin-bottom: 5px;}
+        .ati-radio-group { display: flex; flex-direction: column; width: 100%; align-items: flex-start;}
+        .ati-radio-group .scale-labels { display: flex; justify-content: space-between; width: 100%; font-weight: bold; margin-bottom: 5px;}
+        .ati-radio-table { width: 100%; border-collapse: collapse; text-align: center;}
+        .ati-radio-table td { padding: 8px; border: 1px solid #ccc; text-align: center;}
+        .ati-radio-table input { transform: scale(1.5);}
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <a href="exp_arcollaboration.html" class="back-arrow">← Back to Home</a>
+        <h2>Demographics Questionnaire</h2>
+        <p>Please enter your information.</p>
+
+        <form id="bexpForm">
+                    <div class="question-container">
+                        <label for="participantId"><strong>Participant ID:</strong></label>
+                        <input type="text" id="participantId" name="participantId" class="input-field" placeholder="Enter Participant ID" required>
+                    </div>
+            
+                    <div class="question-container">
+                        <label for="age"><strong>1. Age:</strong></label>
+                        <input type="number" id="age" name="age" class="input-field" placeholder="Enter age">
+                    </div>
+            
+                    <div class="question-container">
+                        <strong>2. Gender</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="gender" value="Weiblich" required> Woman</label>
+                            <label><input type="radio" name="gender" value="Männlich"> Man</label>
+                            <label><input type="radio" name="gender" value="Divers"> Divers</label>
+                            <label><input type="radio" name="gender" value="Keine Angabe"> No Answer</label>
+                        </div>
+                    </div>
+            
+                    <div class="question-container">
+                        <strong>3. Previous experience with AR/VR systems:</strong>
+                        <div class="radio-group">
+                            <label><input type="radio" name="vrExperience" value="no" required> No experience (0h)</label>
+                            <label><input type="radio" name="vrExperience" value="little"> Little experience (1-10h)</label>
+                            <label><input type="radio" name="vrExperience" value="some"> Some experience (11-30h)</label>
+                            <label><input type="radio" name="vrExperience" value="lots"> Lots of experience (31-100h)</label>
+                        </div>
+                    </div>
+
+                    <hr>
+             <h2>Affinity for Technology Interaction Scale - ATI</h2>
+
+                    <script>
+                        const questionsATI = [
+                            ["I like to occupy myself in greater detail with technical systems.", "Completely Disagree", "Completely Agree"],
+                            ["I like testing the functions of new technical systems.", "Completely Disagree", "Completely Agree"],
+                            ["I predominantly deal with technical systems because I have to.", "Completely Disagree", "Completely Agree"],
+                            ["When I have a new technical system in front of me, I try it out intensively.", "Completely Disagree", "Completely Agree"],
+                            ["I enjoy spending time becoming acquainted with a new technical system.", "Completely Disagree", "Completely Agree"],
+                            ["It is enough for me that a technical system works; I don’t care how or why.", "Completely Disagree", "Completely Agree"],
+                            ["I try to understand how a technical system exactly works.", "Completely Disagree", "Completely Agree"],
+                            ["It is enough for me to know the basic functions of a technical system.", "Completely Disagree", "Completely Agree"],
+                            ["I try to make full use of the capabilities of a technical system.", "Completely Disagree", "Completely Agree"]
+                        ];
+                    
+                        document.write(questionsATI.map((q, index) => `
+                            <div class="ati-question-container">
+                                <p><strong>${q[0]}</strong></p>
+                                <div class="ati-radio-group">
+                                    <div class="scale-labels"><span>${q[1]}</span><span>${q[2]}</span></div>
+                                    <table class="ati-radio-table">
+                                        <tr>
+                                            ${Array.from({ length: 6 }, (_, i) => `
+                                                <td><input type="radio" name="ati${index + 1}" value="${i + 1}" ${i === 0 ? "required" : ""}></td>
+                                            `).join("")}
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        `).join(""));
+                    
+                        
+                    </script>
+
+
+            <div class="submit-container">
+                <button type="submit" class="submit-btn" onclick="saveExcel()">Submit</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+function saveExcel() {
+        event.preventDefault(); // Prevent default form submission
+        // Ensure participant ID is not empty
+        let isValid = true;
+        let errors = [];
+        let requiredInputs = document.querySelectorAll('input[required]');
+    requiredInputs.forEach(input => {
+        if (!input.value.trim()) {
+            isValid = false;
+            errors.push(`Please fill in: ${input.name}`);
+        }
+    });
+
+    // Validate radio button groups
+    const radioGroups = [
+        { name: "gender", label: "Gender" },
+        { name: "vrExperience", label: "VR/AR/MR Experience" },
+    ];
+
+    radioGroups.forEach(group => {
+        let checked = document.querySelector(`input[name="${group.name}"]:checked`);
+        if (!checked) {
+            isValid = false;
+            errors.push(`Please select an option for: ${group.label}`);
+        }
+    });
+    const itemsATI = 9; // Number of ATI questions
+    for (let i = 1; i <= itemsATI; i++) {
+        let checked = document.querySelector(`input[name="ati${i}"]:checked`);
+        if (!checked) {
+            isValid = false;
+            errors.push(`Please answer question ${i} in the ATI Scale.`);
+        }
+    }
+
+    if (!isValid) {
+        alert(errors.join("\n"));
+        return;
+    }
+
+        let participantId = document.getElementById("participantId").value.trim();
+        if (!participantId) {
+        participantId = "Unknown_Participant"; // Default filename if no ID is entered
+        }
+        let data = [];
+        function collectDemographicData(data) {
+                    let participantId = document.getElementById("participantId").value.trim();
+                    let age = document.getElementById("age").value.trim();
+                    let gender = document.querySelector(`input[name="gender"]:checked`);
+                    let vrExperience = document.querySelector(`input[name="vrExperience"]:checked`);
+            
+                    data.push(["Participant ID", participantId || "Not Provided"]);
+                    data.push(["Age", age || "Not Provided"]);
+                    data.push(["Gender", gender ? gender.value : "Not Provided"]);
+                    data.push(["VR/AR/MR Experience", vrExperience ? vrExperience.value : "Not Provided"]);
+                    // Convert data to a worksheet
+        
+                }
+
+                collectDemographicData(data);
+
+                const questionsATI = [
+            "ATI1", "ATI2", "ATI3", "ATI4", "ATI5", "ATI6", "ATI7", "ATI8", "ATI9"
+        ];            
+        questionsATI.forEach((question, index) => {
+                let selectedValue = document.querySelector(`input[name="ati${index + 1}"]:checked`);
+                data.push([question, selectedValue ? selectedValue.value : "No Answer"]);
+            });
+                let ws = XLSX.utils.aoa_to_sheet(data);
+                let wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
+
+                // Save as Excel file
+                let fileName = `Demo_Ati_${participantId}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                alert("Data saved successfully as " + fileName);
+    }
+    </script>   
+</body>
+</html>
