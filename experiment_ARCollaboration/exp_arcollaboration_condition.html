@@ -59,16 +59,37 @@
     <form id="surveyForm">
 
       <!-- Basic info -->
-      <div class="meta-row">
-        <div class="field">
-          <label for="participantId">Participant ID *</label>
-          <input class="input-field" type="text" id="participantId" name="participantId" placeholder="e.g., P01" required />
-        </div>
-        <div class="field">
-          <label for="condition">Condition (optional)</label>
-          <input class="input-field" type="text" id="condition" name="condition" placeholder="e.g., AR / VR / Control" />
-        </div>
-      </div>
+   <div class="meta-row">
+  <div class="field">
+    <label for="participantId">Participant ID *</label>
+    <input class="input-field" type="text" id="participantId" name="participantId" placeholder="e.g., P01" required />
+  </div>
+
+  <div class="field">
+    <label for="condition">Condition (optional)</label>
+    <input class="input-field" type="text" id="condition" name="condition" placeholder="e.g., AR / VR / Control" required />
+  </div>
+
+  <div class="field">
+    <label for="solutionChecked">Solution checked</label>
+    <input class="input-field" type="number" id="solutionChecked" name="solutionChecked" min="0" step="1" placeholder="0" required />
+  </div>
+
+  <div class="field">
+    <label for="ballsGrabbed">Balls grabbed</label>
+    <input class="input-field" type="number" id="ballsGrabbed" name="ballsGrabbed" min="0" step="1" placeholder="0" required />
+  </div>
+
+  <div class="field">
+    <label for="partsPainted">Parts painted</label>
+    <input class="input-field" type="number" id="partsPainted" name="partsPainted" min="0" step="1" placeholder="0" required   />
+  </div>
+
+  <div class="field">
+    <label for="faults">Faults</label>
+    <input class="input-field" type="number" id="faults" name="faults" min="0" step="1" placeholder="0" required />
+  </div>
+</div>
 
       <hr class="section-divider" />
 
@@ -324,8 +345,17 @@ function renderLikert7Table(name) {
       const errors = [];
       const participantId = document.getElementById("participantId").value.trim();
       const condition = document.getElementById("condition").value.trim();
+      const solutionChecked = document.getElementById("solutionChecked").value;
+      const ballsGrabbed   = document.getElementById("ballsGrabbed").value;
+      const partsPainted   = document.getElementById("partsPainted").value;
+      const faults         = document.getElementById("faults").value;
 
       if (!participantId) errors.push("Please enter Participant ID.");
+      if (!condition) errors.push("Please enter Condition.");
+      if (!solutionChecked) errors.push("Please enter Solution checked.");
+      if (!ballsGrabbed) errors.push("Please enter Balls grabbed.");
+      if (!partsPainted) errors.push("Please enter Parts painted.");
+      if (!faults) errors.push("Please enter Faults.");
 
       // NASA TLX (6)
       for (let i = 1; i <= 6; i++) {
@@ -363,6 +393,10 @@ function renderLikert7Table(name) {
       const data = [];
       data.push(["Participant ID", participantId]);
       data.push(["Condition", condition || "Not Provided"]);
+      data.push(["Solution checked", solutionChecked === "" ? "Not Provided" : Number(solutionChecked)]);
+      data.push(["Balls grabbed",   ballsGrabbed === "" ? "Not Provided" : Number(ballsGrabbed)]);
+      data.push(["Parts painted",   partsPainted === "" ? "Not Provided" : Number(partsPainted)]);
+      data.push(["Faults",          faults === "" ? "Not Provided" : Number(faults)]);
       data.push([]);
 
       // NASA
