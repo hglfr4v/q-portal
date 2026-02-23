@@ -223,20 +223,20 @@ function renderLikert7Table(name) {
         // ===== 1) First order: Co-presence (table: self vs other) =====
         const nm_copresence_rows = [
           {
-            self:  "I often felt as if (my partner) and I were in the same (room) together.",
-            other: "I think (my partner) often felt as if we were in the same room together."
+            self:  "I often felt as if the other participants and I were in the same room together.",
+            other: "I think the other participants often felt as if we were in the same room together."
           },
           {
-            self:  "I was often aware of (my partner) in the (room).",
-            other: "(My partner) was often aware of me in the (room)."
+            self:  "I was often aware of the other participants in the room.",
+            other: "The other participants were often aware of me in the room."
           },
           {
-            self:  "I hardly noticed (my partner) in the (room).",
-            other: "(My partner) didn’t notice me in the (room)."
+            self:  "I hardly noticed the other participants in the room.",
+            other: "the other participants didn’t notice me in the room."
           },
           {
-            self:  "I often felt as if we were in different places rather than together in same (room).",
-            other: "I think (my partner) often felt as if we were in different places rather than together in the same (room)."
+            self:  "I often felt as if we were in different places rather than together in same room.",
+            other: "I think the other participants often felt as if we were in different places rather than together in the same room."
           }
         ];
 
@@ -269,25 +269,25 @@ function renderLikert7Table(name) {
         // ===== 2) Second order: Psycho-behavioral interaction =====
         const nm_second_order = {
           "Perceived attentional engagement": [
-            { self: "I paid close attention to (my partner).", other: "(My partner) paid close attention to me." },
-            { self: "I was easily distracted from (my partner) when other things were going on.", other: "(My partner) was easily distracted from me when other things were going on." },
-            { self: "I tended to ignore (my partner).", other: "(My partner) tended to ignore me." }
+            { self: "I paid close attention to the other participants.", other: "The other participants paid close attention to me." },
+            { self: "I was easily distracted from the other participants when other things were going on.", other: "The other participants were easily distracted from me when other things were going on." },
+            { self: "I tended to ignore the other participants.", other: "The other participants tended to ignore me." }
           ],
           "Perceived emotional contagion": [
-            { self: "I was sometimes influenced by (my partner’s) moods.", other: "(My partner) was sometimes influenced by my moods." },
-            { self: "When I was happy, (my partner) tended to be happy.", other: "When (my partner) was happy, I tended to be happy." },
-            { self: "When I was feeling sad (my partner) also seemed to be down.", other: "When (my partner) was feeling sad, I tended to be sad." },
-            { self: "When I was feeling nervous, (my partner) also seemed to be nervous.", other: "When (my partner) was nervous, I tended to be nervous." }
+            { self: "I was sometimes influenced by (my partner’s) moods.", other: "the other participants was sometimes influenced by my moods." },
+            { self: "When I was happy, the other participants tended to be happy.", other: "When the other participants was happy, I tended to be happy." },
+            { self: "When I was feeling sad the other participants also seemed to be down.", other: "When the other participants was feeling sad, I tended to be sad." },
+            { self: "When I was feeling nervous, the other participants also seemed to be nervous.", other: "When the other participants was nervous, I tended to be nervous." }
           ],
           "Perceived comprehension": [
-            { self: "I was able to communicate my intentions clearly to (my partner).", other: "(My partner) was able to communicate their intentions clearly to me." },
-            { self: "My thoughts were clear to (my partner).", other: "(My partner’s) thoughts were clear to me." },
-            { self: "I was able to understand what (my partner) meant.", other: "(My partner) was able to understand what I meant." }
+            { self: "I was able to communicate my intentions clearly to the other participants.", other: "the other participants was able to communicate their intentions clearly to me." },
+            { self: "My thoughts were clear to the other participants.", other: "(My partner’s) thoughts were clear to me." },
+            { self: "I was able to understand what the other participants meant.", other: "the other participants was able to understand what I meant." }
           ],
           "Perceived behavioral interdependence": [
             { self: "My actions were often dependent on (my partner’s) actions.", other: "(My partner’s) actions were often dependent on my actions." },
-            { self: "My behavior was often in direct response to (my partner’s) behavior.", other: "The behavior of (my partner) was often in direct response to my behavior." },
-            { self: "What I did often affected what (my partner) did.", other: "What (my partner) did often affected what I did." }
+            { self: "My behavior was often in direct response to (my partner’s) behavior.", other: "The behavior of the other participants was often in direct response to my behavior." },
+            { self: "What I did often affected what the other participants did.", other: "What the other participants did often affected what I did." }
           ]
         };
 
@@ -427,16 +427,16 @@ function renderLikert7Table(name) {
       // Networked Minds: Co-presence
       data.push(["Networked Minds — First order: Co-presence"]);
       const cpSelf = [
-        "I often felt as if (my partner) and I were in the same (room) together.",
-        "I was often aware of (my partner) in the (room).",
-        "I hardly noticed (my partner) in the (room).",
-        "I often felt as if we were in different places rather than together in same (room)."
+        "I often felt as if the other participants and I were in the same room together.",
+        "I was often aware of the other participants in the room.",
+        "I hardly noticed the other participants in the room.",
+        "I often felt as if we were in different places rather than together in same room."
       ];
       const cpOther = [
-        "I think (my partner) often felt as if we were in the same room together.",
-        "(My partner) was often aware of me in the (room).",
-        "(My partner) didn’t notice me in the (room).",
-        "I think (my partner) often felt as if we were in different places rather than together in the same (room)."
+        "I think the other participants often felt as if we were in the same room together.",
+        "The other participants were often aware of me in the room.",
+        "The other participants didn’t notice me in the room.",
+        "I think the other participants often felt as if we were in different places rather than together in the same room."
       ];
       for (let i = 1; i <= 4; i++) {
         data.push([`NM_CP_SELF_${i}`, cpSelf[i-1], mustGetChecked(`nm_cp_self_${i}`).value]);
@@ -449,25 +449,25 @@ function renderLikert7Table(name) {
 
       const so = [
         { name: "Perceived attentional engagement", rows: [
-          { self:"I paid close attention to (my partner).", other:"(My partner) paid close attention to me." },
-          { self:"I was easily distracted from (my partner) when other things were going on.", other:"(My partner) was easily distracted from me when other things were going on." },
-          { self:"I tended to ignore (my partner).", other:"(My partner) tended to ignore me." },
+          { self:"I paid close attention to the other participants.", other:"The other participants paid close attention to me." },
+          { self:"I was easily distracted from the other participants when other things were going on.", other:"The other participants were easily distracted from me when other things were going on." },
+          { self:"I tended to ignore the other participants.", other:"The other participants tended to ignore me." },
         ]},
         { name: "Perceived emotional contagion", rows: [
-          { self:"I was sometimes influenced by (my partner’s) moods.", other:"(My partner) was sometimes influenced by my moods." },
-          { self:"When I was happy, (my partner) tended to be happy.", other:"When (my partner) was happy, I tended to be happy." },
-          { self:"When I was feeling sad (my partner) also seemed to be down.", other:"When (my partner) was feeling sad, I tended to be sad." },
-          { self:"When I was feeling nervous, (my partner) also seemed to be nervous.", other:"When (my partner) was nervous, I tended to be nervous." },
+          { self:"I was sometimes influenced by the other participants' moods.", other:"The other participants were sometimes influenced by my moods." },
+          { self:"When I was happy, the other participants tended to be happy.", other:"When the other participants were happy, I tended to be happy." },
+          { self:"When I was feeling sad the other participants also seemed to be down.", other:"When the other participants were feeling sad, I tended to be sad." },
+          { self:"When I was feeling nervous, the other participants also seemed to be nervous.", other:"When the other participants were nervous, I tended to be nervous." },
         ]},
         { name: "Perceived comprehension", rows: [
-          { self:"I was able to communicate my intentions clearly to (my partner).", other:"(My partner) was able to communicate their intentions clearly to me." },
-          { self:"My thoughts were clear to (my partner).", other:"(My partner’s) thoughts were clear to me." },
-          { self:"I was able to understand what (my partner) meant.", other:"(My partner) was able to understand what I meant." },
+          { self:"I was able to communicate my intentions clearly to the other participants.", other:"The other participants were able to communicate their intentions clearly to me." },
+          { self:"My thoughts were clear to the other participants.", other:"The other participants’ thoughts were clear to me." },
+          { self:"I was able to understand what the other participants meant.", other:"The other participants were able to understand what I meant." },
         ]},
         { name: "Perceived behavioral interdependence", rows: [
-          { self:"My actions were often dependent on (my partner’s) actions.", other:"(My partner’s) actions were often dependent on my actions." },
-          { self:"My behavior was often in direct response to (my partner’s) behavior.", other:"The behavior of (my partner) was often in direct response to my behavior." },
-          { self:"What I did often affected what (my partner) did.", other:"What (my partner) did often affected what I did." },
+          { self:"My actions were often dependent on (my partner’s) actions.", other:"The other participants’ actions were often dependent on my actions." },
+          { self:"My behavior was often in direct response to (my partner’s) behavior.", other:"The behavior of the other participants was often in direct response to my behavior." },
+          { self:"What I did often affected what the other participants did.", other:"What the other participants did often affected what I did." },
         ]},
       ];
 
@@ -485,7 +485,7 @@ function renderLikert7Table(name) {
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Survey_Results");
 
-      const fileName = `Survey_${participantId}.xlsx`;
+      const fileName = `Survey_PID${participantId}_CID${condition}.xlsx`;
       XLSX.writeFile(wb, fileName);
       alert("Data saved successfully as " + fileName);
     }
