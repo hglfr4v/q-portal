@@ -54,7 +54,14 @@
 <body>
   <div class="container">
     <h2>Post-Task Questionnaires</h2>
-    <p class="helper">Please answer all items. Your responses will be saved as an Excel file.</p>
+<p class="helper">
+  Thank you for taking part in this study. You will now answer a short set of questionnaires about your experience during the task you just completed.
+  There are no right or wrong answers—please respond based on your personal impression.
+  All responses are used for research purposes only and will be stored in pseudonymized form (using your Participant ID).
+  Please answer every item; the form will only save once everything is completed.
+
+  If anything is unclear, please ask the experimenter before submitting.
+</p>  
 
     <form id="surveyForm">
 
@@ -95,8 +102,10 @@
 
       <!-- NASA TLX -->
       <h3>NASA-TLX</h3>
-      <p class="helper">21-point scale (1 = left label, 21 = right label)</p>
-
+<p class="helper">
+  <strong>NASA-TLX</strong> measures perceived workload during the task (e.g., mental demand, effort, and frustration).
+  Use the 21-point scale to indicate how strongly each dimension applied to your experience.
+</p>
       <script>
         const questionsNasa = [
           ["Mental Demand", "How mentally demanding was the task?", "Very Low", "Very High"],
@@ -141,8 +150,10 @@
 
       <!-- UEQ-S -->
       <h3>UEQ-S</h3>
-      <p class="helper">7-point semantic differential (left adjective ↔ right adjective)</p>
-
+<p class="helper">
+  <strong>UEQ-S</strong> measures overall user experience, covering both pragmatic qualities (e.g., clarity, efficiency) and hedonic qualities (e.g., excitement, novelty).
+  For each pair of adjectives, select the option that best matches your impression.
+</p>
       <script>
         const questionsUEQ_S = [
           ["Obstructive", "Supportive"],
@@ -188,8 +199,11 @@
 
       <!-- Networked Minds Social Presence -->
       <h3>Social Presence (Networked Minds)</h3>
-      <p class="helper">For each statement, select a value on a 7-point Likert scale (1 = strongly disagree … 7 = strongly agree).</p>
-
+<p class="helper">
+  <strong>Networked Minds – Social Presence</strong> measures how strongly you perceived the other participants as “present” and how you experienced interaction with them
+  (e.g., attention, emotional influence, understanding, and behavioral interdependence).
+  For each statement, select your agreement on a 7-point scale.
+</p>
       <script>
         // Helper to render a 7-point Likert under each item (in-table)
 
